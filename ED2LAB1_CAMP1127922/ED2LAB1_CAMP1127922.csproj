@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DS\AVLTree.cs" />
     <Compile Include="DS\GenNode.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
