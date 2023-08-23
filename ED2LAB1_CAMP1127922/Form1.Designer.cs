@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.button1 = new System.Windows.Forms.Button();
+            this.showmslbl = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
@@ -41,22 +42,33 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // showmslbl
+            // 
+            this.showmslbl.AutoSize = true;
+            this.showmslbl.Location = new System.Drawing.Point(170, 45);
+            this.showmslbl.Name = "showmslbl";
+            this.showmslbl.Size = new System.Drawing.Size(0, 13);
+            this.showmslbl.TabIndex = 1;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(704, 554);
+            this.Controls.Add(this.showmslbl);
             this.Controls.Add(this.button1);
             this.Name = "Form1";
             this.Text = "Talent Hub";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label showmslbl;
     }
 }
 

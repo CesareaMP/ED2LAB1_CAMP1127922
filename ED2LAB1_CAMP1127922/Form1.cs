@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -36,7 +37,15 @@ namespace ED2LAB1_CAMP1127922
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 string rutaArchivo = openFileDialog.FileName;
+                Stopwatch stopwatch = new Stopwatch();
+
+                stopwatch.Start();
                 CargarDatosDesdeCSV(rutaArchivo);
+                stopwatch.Stop();
+                long elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+                showmslbl.Text = $"El algoritmo tardó {elapsedMilliseconds} ms en ejecutarse.";
+
+
                 button1.Enabled = false;
                 button1.Text = "Archivo cargado satisfactoriamente";
             }
