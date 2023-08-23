@@ -45,6 +45,10 @@ namespace ED2LAB1_CAMP1127922.DS
         private Nodo Patch(Nodo node, Person persona)
         {
 
+            if (node == null) return new Nodo(persona);
+            else if (persona.name.CompareTo(node.nombre) < 0) node.izquierda = Add(node.izquierda, persona);
+            else if (persona.name.CompareTo(node.nombre) > 0) node.derecha = Add(node.derecha, persona);
+            else if (persona.name.CompareTo(node.nombre) == 0) node.PatchData(persona);
             return node;
         }
     

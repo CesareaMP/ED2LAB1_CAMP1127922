@@ -28,5 +28,20 @@ namespace ED2LAB1_CAMP1127922.DS
         {
             persona.RemoveAll(person => person.dpi ==p.dpi);           
         }
+        public void PatchData(Person p)
+        {
+            int cantidad = persona.Count();
+
+            for (int i = 0; i < cantidad; i++) { 
+                Person aux = persona[i];
+            if (aux.dpi == p.dpi)
+                {
+                    aux.datebirth = p.datebirth;
+                    aux.address= p.address;
+                    Deletefrom(p);
+                    AddTolist(aux);
+                }
+            }
+        }
     }
 }
