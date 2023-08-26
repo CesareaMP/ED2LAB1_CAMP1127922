@@ -43,7 +43,7 @@ namespace ED2LAB1_CAMP1127922
                 CargarDatosDesdeCSV(rutaArchivo);
                 stopwatch.Stop();
                 long elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
-                showmslbl.Text = $"El algoritmo tardó {elapsedMilliseconds} ms en ejecutarse.";
+                showmslbl.Text = $"{elapsedMilliseconds}ms";
 
 
                 button1.Enabled = false;
@@ -93,28 +93,53 @@ namespace ED2LAB1_CAMP1127922
                 listabusquedas = arbol.Search(nombre);
                 if (listabusquedas != null)
                 {
-
                     cont = listabusquedas.Count();
                     for (int i = 0; i < cont; i++)
                     {
                         aux = listabusquedas[i];
-                        //{"name":"emie","dpi":"4651729718310","datebirth":"1982-10-26T07:10:07.521Z","address":"columbia"}
-                        var complexObject = new Person
+                        var objpersona = new Person
                         {
                             name = aux.name,
                             dpi = aux.dpi,
                             datebirth = aux.datebirth,
                             address = aux.address
                         };
-                        string jsonString = JsonConvert.SerializeObject(complexObject, Formatting.Indented);
+                        string jsonString = JsonConvert.SerializeObject(objpersona, Formatting.None);
 
-                        jsons.Add(jsonString);
-                        jsonlist.Items.Add(jsonString);
+                        jsons.Add(jsonString);                                                
                     }
+                    crearCSV(nombre, jsons);
                 }
                 else MessageBox.Show("no se encontraron datos asociados al nombre de " + nombre);
             }
             
+        }
+        public void crearCSV(string nombre, List<string> jsons)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Archivos CSV|*.csv";
+            saveFileDialog.Title = "Guardar archivo CSV, nombre sugerido: " + nombre;
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    using (StreamWriter writer = new StreamWriter(saveFileDialog.FileName))
+                    {
+                        foreach (string json in jsons)
+                        {
+                            writer.WriteLine(json);
+                        }
+                    }
+
+                    MessageBox.Show("Archivo CSV creado exitosamente.");
+                    Process.Start(saveFileDialog.FileName);//abre el archivo creado
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al crear el archivo CSV: " + ex.Message);
+                }
+            }
         }
     }
 }

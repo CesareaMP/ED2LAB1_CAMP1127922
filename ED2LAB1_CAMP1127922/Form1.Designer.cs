@@ -32,11 +32,9 @@
             this.showmslbl = new System.Windows.Forms.Label();
             this.edTabControl = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.label1 = new System.Windows.Forms.Label();
-            this.nombretxt = new System.Windows.Forms.TextBox();
             this.buscarbtn = new System.Windows.Forms.Button();
-            this.jsonlist = new System.Windows.Forms.ListBox();
+            this.nombretxt = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.edTabControl.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.SuspendLayout();
@@ -63,36 +61,42 @@
             // 
             this.edTabControl.AllowDrop = true;
             this.edTabControl.Controls.Add(this.tabPage3);
-            this.edTabControl.Controls.Add(this.tabPage4);
             this.edTabControl.Enabled = false;
-            this.edTabControl.Location = new System.Drawing.Point(12, 106);
+            this.edTabControl.Location = new System.Drawing.Point(12, 96);
             this.edTabControl.Multiline = true;
             this.edTabControl.Name = "edTabControl";
             this.edTabControl.SelectedIndex = 0;
-            this.edTabControl.Size = new System.Drawing.Size(626, 278);
+            this.edTabControl.Size = new System.Drawing.Size(284, 209);
             this.edTabControl.TabIndex = 2;
             // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.jsonlist);
             this.tabPage3.Controls.Add(this.buscarbtn);
             this.tabPage3.Controls.Add(this.nombretxt);
             this.tabPage3.Controls.Add(this.label1);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(618, 252);
+            this.tabPage3.Size = new System.Drawing.Size(276, 183);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Buscar";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // tabPage4
+            // buscarbtn
             // 
-            this.tabPage4.Location = new System.Drawing.Point(4, 22);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(351, 252);
-            this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "Exportar";
-            this.tabPage4.UseVisualStyleBackColor = true;
+            this.buscarbtn.Location = new System.Drawing.Point(25, 61);
+            this.buscarbtn.Name = "buscarbtn";
+            this.buscarbtn.Size = new System.Drawing.Size(219, 102);
+            this.buscarbtn.TabIndex = 2;
+            this.buscarbtn.Text = "Buscar";
+            this.buscarbtn.UseVisualStyleBackColor = true;
+            this.buscarbtn.Click += new System.EventHandler(this.buscarbtn_Click);
+            // 
+            // nombretxt
+            // 
+            this.nombretxt.Location = new System.Drawing.Point(72, 22);
+            this.nombretxt.Name = "nombretxt";
+            this.nombretxt.Size = new System.Drawing.Size(172, 20);
+            this.nombretxt.TabIndex = 1;
             // 
             // label1
             // 
@@ -103,37 +107,11 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Nombre";
             // 
-            // nombretxt
-            // 
-            this.nombretxt.Location = new System.Drawing.Point(72, 22);
-            this.nombretxt.Name = "nombretxt";
-            this.nombretxt.Size = new System.Drawing.Size(172, 20);
-            this.nombretxt.TabIndex = 1;
-            // 
-            // buscarbtn
-            // 
-            this.buscarbtn.Location = new System.Drawing.Point(250, 22);
-            this.buscarbtn.Name = "buscarbtn";
-            this.buscarbtn.Size = new System.Drawing.Size(77, 20);
-            this.buscarbtn.TabIndex = 2;
-            this.buscarbtn.Text = "Buscar";
-            this.buscarbtn.UseVisualStyleBackColor = true;
-            this.buscarbtn.Click += new System.EventHandler(this.buscarbtn_Click);
-            // 
-            // jsonlist
-            // 
-            this.jsonlist.Enabled = false;
-            this.jsonlist.FormattingEnabled = true;
-            this.jsonlist.Location = new System.Drawing.Point(25, 56);
-            this.jsonlist.Name = "jsonlist";
-            this.jsonlist.Size = new System.Drawing.Size(571, 173);
-            this.jsonlist.TabIndex = 3;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(650, 396);
+            this.ClientSize = new System.Drawing.Size(308, 317);
             this.Controls.Add(this.edTabControl);
             this.Controls.Add(this.showmslbl);
             this.Controls.Add(this.button1);
@@ -154,8 +132,6 @@
         private System.Windows.Forms.Label showmslbl;
         private System.Windows.Forms.TabControl edTabControl;
         private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.TabPage tabPage4;
-        private System.Windows.Forms.ListBox jsonlist;
         private System.Windows.Forms.Button buscarbtn;
         private System.Windows.Forms.TextBox nombretxt;
         private System.Windows.Forms.Label label1;

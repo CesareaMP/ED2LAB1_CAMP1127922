@@ -63,13 +63,16 @@ namespace ED2LAB1_CAMP1127922.DS
         }
         public List<Person> Search(Nodo node, string nombre)
         {
-            if (nombre == node.nombre)
+            if (node!=null)
             {
-                return node.persona;
+                if (nombre == node.nombre)
+                {
+                    return node.persona;
+                }
+                else if (nombre.CompareTo(node.nombre) > 0) return Search(node.derecha, nombre);
+                else if (nombre.CompareTo(node.nombre) < 0) return Search(node.izquierda, nombre);
             }
-            else if(nombre.CompareTo(node.nombre)>0) return Search(node.derecha,nombre);
-            else if(nombre.CompareTo(node.nombre)<0) return Search(node.izquierda,nombre);
-            return node.persona;
+            return null;
         }
     }
 }
