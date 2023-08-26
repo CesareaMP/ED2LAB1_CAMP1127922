@@ -48,6 +48,7 @@ namespace ED2LAB1_CAMP1127922
 
                 button1.Enabled = false;
                 button1.Text = "Archivo cargado satisfactoriamente";
+                edTabControl.Enabled = true;
             }
             else
             {
@@ -73,5 +74,47 @@ namespace ED2LAB1_CAMP1127922
                 }
             }
         }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
         }
+
+        private void buscarbtn_Click(object sender, EventArgs e)
+        {
+            string nombre = nombretxt.Text;
+            List<Person> listabusquedas = new List<Person>();
+            Person aux;
+            List<string> jsons= new List<string>();
+            int cont = 0;
+            if (nombretxt.Text == "") MessageBox.Show("Ingrese un nombre a buscar");
+            else
+            {
+                listabusquedas = arbol.Search(nombre);
+                if (listabusquedas != null)
+                {
+
+                    cont = listabusquedas.Count();
+                    for (int i = 0; i < cont; i++)
+                    {
+                        aux = listabusquedas[i];
+                        //{"name":"emie","dpi":"4651729718310","datebirth":"1982-10-26T07:10:07.521Z","address":"columbia"}
+                        var complexObject = new Person
+                        {
+                            name = aux.name,
+                            dpi = aux.dpi,
+                            datebirth = aux.datebirth,
+                            address = aux.address
+                        };
+                        string jsonString = JsonConvert.SerializeObject(complexObject, Formatting.Indented);
+
+                        jsons.Add(jsonString);
+                        jsonlist.Items.Add(jsonString);
+                    }
+                }
+                else MessageBox.Show("no se encontraron datos asociados al nombre de " + nombre);
+            }
+            
+        }
+    }
 }
