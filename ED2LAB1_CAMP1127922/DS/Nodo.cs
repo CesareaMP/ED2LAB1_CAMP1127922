@@ -26,7 +26,7 @@ namespace ED2LAB1_CAMP1127922.DS
         }
         public void Deletefrom(Person p)
         {
-            persona.RemoveAll(person => person.dpi == p.dpi);           
+            persona.RemoveAll(person => person.dpi == p.dpi);                  
         }
         public void PatchData(Person p)
         {

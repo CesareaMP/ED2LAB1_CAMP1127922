@@ -16,7 +16,7 @@ namespace ED2LAB1_CAMP1127922.DS
         }
         public void Delete(Person ndato)
         {
-            raiz = Delete(raiz, ndato);
+            raiz = Delete(raiz, ndato);            
         }
         public void Patch(Person ndato)
         {
@@ -26,6 +26,7 @@ namespace ED2LAB1_CAMP1127922.DS
         {
             return Search(raiz, nombre);
         }
+  
 
         private Nodo Add (Nodo node, Person persona)
         {
@@ -35,16 +36,34 @@ namespace ED2LAB1_CAMP1127922.DS
             else if (persona.name.CompareTo(node.nombre) == 0) node.AddTolist(persona);
             return node;
         }
-       private Nodo Delete(Nodo node, Person persona)
+        private Nodo Delete(Nodo nodo, Person persona)
         {
-            if (persona.name.CompareTo(node.nombre) == 0)
+            if (nodo != null)
             {
-                node.Deletefrom(persona);                
-                return node;       
+                if (persona.name.CompareTo(nodo.nombre) == 0)
+                {
+                    nodo.Deletefrom(persona);
+
+                    if (nodo.persona.Count == 0)
+                    {
+                        // Si el nodo se queda sin datos, eliminar el nodo y buscar reemplazo
+                        if (nodo.izquierda == null)
+                            return nodo.derecha;
+                        else if (nodo.derecha == null)
+                            return nodo.izquierda;
+
+                        Nodo reemplazo = EncontrarMinimo(nodo.derecha);
+                        nodo.nombre = reemplazo.nombre;
+                        nodo.persona = reemplazo.persona;
+                        nodo.derecha = Delete(nodo.derecha, reemplazo.persona[0]);
+                    }
+                }
+                else if (persona.name.CompareTo(nodo.nombre) < 0)
+                    nodo.izquierda = Delete(nodo.izquierda, persona);
+                else if (persona.name.CompareTo(nodo.nombre) > 0)
+                    nodo.derecha = Delete(nodo.derecha, persona);
             }
-            else if (persona.name.CompareTo(node.nombre) < 0) node.izquierda = Delete(node.izquierda, persona);
-            else if (persona.name.CompareTo(node.nombre) > 0) node.derecha = Delete(node.derecha, persona);
-            return node;
+            return nodo;
         }
         private Nodo Patch(Nodo node, Person persona)
         {
@@ -74,5 +93,15 @@ namespace ED2LAB1_CAMP1127922.DS
             }
             return null;
         }
+        private Nodo EncontrarMinimo(Nodo nodo)
+        {
+            while (nodo.izquierda != null)
+            {
+                nodo = nodo.izquierda;
+            }
+            return nodo;
+        }
+
+
     }
 }
