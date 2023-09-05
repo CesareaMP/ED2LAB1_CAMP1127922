@@ -40,15 +40,23 @@ namespace ED2LAB1_CAMP1127922
                 Stopwatch stopwatch = new Stopwatch();
 
                 stopwatch.Start();
-                CargarDatosDesdeCSV(rutaArchivo);
-                stopwatch.Stop();
-                long elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
-                showmslbl.Text = $"{elapsedMilliseconds}ms";
+                try
+                {
+                    CargarDatosDesdeCSV(rutaArchivo);
+                    stopwatch.Stop();
+                    long elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+                    showmslbl.Text = $"{elapsedMilliseconds}ms";
 
 
-                button1.Enabled = false;
-                button1.Text = "Archivo cargado satisfactoriamente";
-                edTabControl.Enabled = true;
+                    button1.Enabled = false;
+                    button1.Text = "Archivo cargado satisfactoriamente";
+                    edTabControl.Enabled = true;
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("El archivo cargado es imposible de leer");
+                }
+                
             }
             else
             {
