@@ -26,16 +26,32 @@ namespace ED2LAB1_CAMP1127922.DS
         {
             return Search(raiz, nombre);
         }
-  
 
-        private Nodo Add (Nodo node, Person persona)
+        private Nodo Add(Nodo nodo, Person persona)
         {
-            if (node == null) return new Nodo(persona);
-            else if (persona.name.CompareTo(node.nombre) < 0) node.izquierda = Add(node.izquierda, persona);
-            else if (persona.name.CompareTo(node.nombre) > 0) node.derecha = Add(node.derecha, persona);
-            else if (persona.name.CompareTo(node.nombre) == 0) node.AddTolist(persona);
-            return node;
+            if (nodo == null)
+                return new Nodo(persona);
+
+            if (persona.name.CompareTo(nodo.nombre) < 0)
+            {
+                nodo.izquierda = Add(nodo.izquierda, persona);
+            }
+            else if (persona.name.CompareTo(nodo.nombre) > 0)
+            {
+                nodo.derecha = Add(nodo.derecha, persona);
+            }
+            else if (persona.name.CompareTo(nodo.nombre) == 0)
+            {
+                nodo.AddTolist(persona);
+            }
+
+            // Recalcula el factor de equilibrio del nodo actual
+            nodo.RecalcularFactorEquilibrio();
+
+            // Realiza las rotaciones si es necesario para mantener el equilibrio
+            return BalancearNodo(nodo);
         }
+
         private Nodo Delete(Nodo nodo, Person persona)
         {
             if (nodo != null)
@@ -62,9 +78,17 @@ namespace ED2LAB1_CAMP1127922.DS
                     nodo.izquierda = Delete(nodo.izquierda, persona);
                 else if (persona.name.CompareTo(nodo.nombre) > 0)
                     nodo.derecha = Delete(nodo.derecha, persona);
+
+                // Recalcula el factor de equilibrio del nodo actual
+                nodo.RecalcularFactorEquilibrio();
+
+                // Realiza las rotaciones si es necesario para mantener el equilibrio
+                return BalancearNodo(nodo);
             }
+
             return nodo;
         }
+
         private Nodo Patch(Nodo node, Person persona)
         {
 
@@ -102,6 +126,73 @@ namespace ED2LAB1_CAMP1127922.DS
             return nodo;
         }
 
+        private Nodo RotacionDerecha(Nodo nodo)
+        {
+            Nodo nuevoPadre = nodo.izquierda;
+            nodo.izquierda = nuevoPadre.derecha;
+            nuevoPadre.derecha = nodo;
+            nodo.RecalcularFactorEquilibrio();
+            nuevoPadre.RecalcularFactorEquilibrio();
+            return nuevoPadre;
+        }
+        private Nodo RotacionIzquierda(Nodo nodo)
+        {
+            Nodo nuevoPadre = nodo.derecha;
+            nodo.derecha = nuevoPadre.izquierda;
+            nuevoPadre.izquierda = nodo;
+            nodo.RecalcularFactorEquilibrio();
+            nuevoPadre.RecalcularFactorEquilibrio();
+            return nuevoPadre;
+        }
+        private Nodo RotacionDobleDerechaIzquierda(Nodo nodo)
+        {
+            nodo.derecha = RotacionDerecha(nodo.derecha);
+            return RotacionIzquierda(nodo);
+        }
+
+        private Nodo RotacionDobleIzquierdaDerecha(Nodo nodo)
+        {
+            nodo.izquierda = RotacionIzquierda(nodo.izquierda);
+            return RotacionDerecha(nodo);
+        }
+        private Nodo BalancearNodo(Nodo nodo)
+        {
+            // Recalcular el factor de equilibrio del nodo
+            nodo.RecalcularFactorEquilibrio();
+
+            // Verificar el factor de equilibrio del nodo
+            if (nodo.FactorEquilibrio > 1)
+            {
+                // El subárbol izquierdo es más alto
+                if (nodo.izquierda.FactorEquilibrio >= 0)
+                {
+                    // Rotación simple a la derecha (RR)
+                    return RotacionDerecha(nodo);
+                }
+                else
+                {
+                    // Rotación doble izquierda-derecha (LR)
+                    return RotacionDobleIzquierdaDerecha(nodo);
+                }
+            }
+            else if (nodo.FactorEquilibrio < -1)
+            {
+                // El subárbol derecho es más alto
+                if (nodo.derecha.FactorEquilibrio <= 0)
+                {
+                    // Rotación simple a la izquierda (LL)
+                    return RotacionIzquierda(nodo);
+                }
+                else
+                {
+                    // Rotación doble derecha-izquierda (RL)
+                    return RotacionDobleDerechaIzquierda(nodo);
+                }
+            }
+
+            // Si el factor de equilibrio está en el rango [-1, 1], el nodo está balanceado
+            return nodo;
+        }
 
     }
 }
