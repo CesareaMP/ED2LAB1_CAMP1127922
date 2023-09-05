@@ -20,7 +20,6 @@ namespace ED2LAB1_CAMP1127922
         int inserts = 0;
         int deletes = 0;
         int patchs = 0;
-        int total = 0;
         public Form1()
         {
             InitializeComponent();
@@ -74,18 +73,10 @@ namespace ED2LAB1_CAMP1127922
                     var content = reader.ReadLine();
                     string action = content.Split(';')[0];
                     string info = content.Split(';')[1];
-                    var persona = JsonConvert.DeserializeObject<Person>(info);
-                    List<Person> listabusquedas=null;
-                    if (total == 1094)
-                    {
-                        MessageBox.Show("asd");
-                    }
-                    
+                    var persona = JsonConvert.DeserializeObject<Person>(info);                                       
                     if (action == "INSERT") { arbol.Add(persona); inserts++; }                   
                     else if (action == "PATCH") { arbol.Patch(persona); patchs++; }
-                    else if (action == "DELETE") { arbol.Delete(persona); deletes++; }
-                    total=inserts+patchs+deletes;
-                  
+                    else if (action == "DELETE") { arbol.Delete(persona); deletes++; }                  
                 }
             }
         }
