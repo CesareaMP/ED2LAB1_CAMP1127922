@@ -40,17 +40,18 @@ namespace ED2LAB1_CAMP1127922
                 Stopwatch stopwatch = new Stopwatch();
 
                 stopwatch.Start();
+                CargarDatosDesdeCSV(rutaArchivo);
+                stopwatch.Stop();
+                long elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+                showmslbl.Text = $"{elapsedMilliseconds}ms";
+
+
+                button1.Enabled = false;
+                button1.Text = "Archivo cargado satisfactoriamente";
+                edTabControl.Enabled = true;
                 try
                 {
-                    CargarDatosDesdeCSV(rutaArchivo);
-                    stopwatch.Stop();
-                    long elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
-                    showmslbl.Text = $"{elapsedMilliseconds}ms";
-
-
-                    button1.Enabled = false;
-                    button1.Text = "Archivo cargado satisfactoriamente";
-                    edTabControl.Enabled = true;
+                   
                 }
                 catch (Exception)
                 {
@@ -88,15 +89,15 @@ namespace ED2LAB1_CAMP1127922
 
         private void buscarbtn_Click(object sender, EventArgs e)
         {
-            string nombre = nombretxt.Text;
+            string dpi = dpitxt.Text;
             List<Person> listabusquedas = new List<Person>();
             Person aux;
-            List<string> jsons= new List<string>();
+            List<string> jsons = new List<string>();
             int cont = 0;
             if (nombretxt.Text == "") MessageBox.Show("Ingrese un nombre a buscar");
             else
             {
-                listabusquedas = arbol.Search(nombre);
+                listabusquedas.Add(arbol.SearchDpi(dpi));
                 if (listabusquedas != null)
                 {
                     cont = listabusquedas.Count();
@@ -108,17 +109,18 @@ namespace ED2LAB1_CAMP1127922
                             name = aux.name,
                             dpi = aux.dpi,
                             datebirth = aux.datebirth,
-                            address = aux.address
+                            address = aux.address,
+                            companies = aux.companies
                         };
                         string jsonString = JsonConvert.SerializeObject(objpersona, Formatting.None);
 
-                        jsons.Add(jsonString);                                                
+                        jsons.Add(jsonString);
                     }
-                    crearCSV(nombre, jsons);
+                    crearCSV(dpi, jsons);
                 }
-                else MessageBox.Show("no se encontraron datos asociados al nombre de " + nombre);
+                else MessageBox.Show("no se encontraron datos asociados al dpi" + dpi);
             }
-            
+            dpitxt.Text = "";
         }
         public void crearCSV(string nombre, List<string> jsons)
         {
@@ -146,6 +148,96 @@ namespace ED2LAB1_CAMP1127922
                     MessageBox.Show("Error al crear el archivo CSV: " + ex.Message);
                 }
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string nombre = nombretxt.Text;
+            List<Person> listabusquedas = new List<Person>();
+            Person aux;
+            List<string> jsons = new List<string>();
+            int cont = 0;
+            if (nombretxt.Text == "") MessageBox.Show("Ingrese un nombre a buscar");
+            else
+            {
+                listabusquedas = arbol.SearchName(nombre);
+                if (listabusquedas != null)
+                {
+                    cont = listabusquedas.Count();
+                    for (int i = 0; i < cont; i++)
+                    {
+                        aux = listabusquedas[i];
+                        var objpersona = new Person
+                        {
+                            name = aux.name,
+                            dpi = aux.dpi,
+                            datebirth = aux.datebirth,
+                            address = aux.address,
+                            companies = aux.companies
+                        };
+                        string jsonString = JsonConvert.SerializeObject(objpersona, Formatting.None);
+
+                        jsons.Add(jsonString);
+                    }
+                    crearCSV(nombre, jsons);
+                }
+                else MessageBox.Show("no se encontraron datos asociados al nombre de " + nombre);
+            }
+            nombretxt.Text = "";
+        }
+
+        private void dpibtn_Click(object sender, EventArgs e)
+        {
+            string dpi = dpitxt.Text;
+            Person persona;
+            string jsonString;
+            if (dpitxt.Text == "") MessageBox.Show("Ingrese un nombre a buscar");
+            else
+            {
+                persona = arbol.SearchDpi(dpi);
+                if (persona != null)
+                {
+                    jsonString = JsonConvert.SerializeObject(persona, Formatting.Indented);
+                    MessageBox.Show(jsonString);
+                }
+                else MessageBox.Show("No se encontraron datos asociados al DPI: " + dpi);
+            }                   
+        }
+
+        private void nombrebtn_Click(object sender, EventArgs e)
+        {
+            string nombre = nombretxt.Text;
+            List<Person> listabusquedas = new List<Person>();
+            Person aux;
+            List<string> jsons = new List<string>();
+            int cont = 0;
+            if (nombretxt.Text == "") MessageBox.Show("Ingrese un nombre a buscar");
+            else
+            {
+                listabusquedas = arbol.SearchName(nombre);
+                if (listabusquedas.Count()!=0)
+                {
+                    cont = listabusquedas.Count();
+                    for (int i = 0; i < cont; i++)
+                    {
+                        aux = listabusquedas[i];
+                        var objpersona = new Person
+                        {
+                            name = aux.name,
+                            dpi = aux.dpi,
+                            datebirth = aux.datebirth,
+                            address = aux.address,
+                            companies = aux.companies
+                        };
+                        string jsonString = JsonConvert.SerializeObject(objpersona, Formatting.None);
+
+                        jsons.Add(jsonString);
+                    }
+                    crearCSV(nombre, jsons);
+                }
+                else MessageBox.Show("no se encontraron datos asociados al nombre de " + nombre);
+            }
+            nombretxt.Text = "";
         }
     }
 }

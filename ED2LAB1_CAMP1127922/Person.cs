@@ -12,5 +12,7 @@ namespace ED2LAB1_CAMP1127922
         public string dpi { get; set; }
         public DateTime datebirth { get; set; }
         public string address { get; set; }       
+        public List<string> companies { get; set;}
+
     }
 }

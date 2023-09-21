@@ -32,11 +32,16 @@
             this.showmslbl = new System.Windows.Forms.Label();
             this.edTabControl = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.buscarbtn = new System.Windows.Forms.Button();
-            this.nombretxt = new System.Windows.Forms.TextBox();
+            this.dpitxt = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.nombretxt = new System.Windows.Forms.TextBox();
+            this.nombrelbl = new System.Windows.Forms.Label();
+            this.dpibtn = new System.Windows.Forms.Button();
+            this.nombrebtn = new System.Windows.Forms.Button();
             this.edTabControl.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
@@ -61,6 +66,7 @@
             // 
             this.edTabControl.AllowDrop = true;
             this.edTabControl.Controls.Add(this.tabPage3);
+            this.edTabControl.Controls.Add(this.tabPage1);
             this.edTabControl.Enabled = false;
             this.edTabControl.Location = new System.Drawing.Point(12, 96);
             this.edTabControl.Multiline = true;
@@ -71,41 +77,79 @@
             // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.buscarbtn);
-            this.tabPage3.Controls.Add(this.nombretxt);
+            this.tabPage3.Controls.Add(this.dpibtn);
+            this.tabPage3.Controls.Add(this.dpitxt);
             this.tabPage3.Controls.Add(this.label1);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(276, 183);
             this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Buscar";
+            this.tabPage3.Text = "Buscar Dpi";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // buscarbtn
+            // dpitxt
             // 
-            this.buscarbtn.Location = new System.Drawing.Point(25, 61);
-            this.buscarbtn.Name = "buscarbtn";
-            this.buscarbtn.Size = new System.Drawing.Size(219, 102);
-            this.buscarbtn.TabIndex = 2;
-            this.buscarbtn.Text = "Buscar";
-            this.buscarbtn.UseVisualStyleBackColor = true;
-            this.buscarbtn.Click += new System.EventHandler(this.buscarbtn_Click);
-            // 
-            // nombretxt
-            // 
-            this.nombretxt.Location = new System.Drawing.Point(72, 22);
-            this.nombretxt.Name = "nombretxt";
-            this.nombretxt.Size = new System.Drawing.Size(172, 20);
-            this.nombretxt.TabIndex = 1;
+            this.dpitxt.Location = new System.Drawing.Point(53, 22);
+            this.dpitxt.Name = "dpitxt";
+            this.dpitxt.Size = new System.Drawing.Size(172, 20);
+            this.dpitxt.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(22, 25);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(44, 13);
+            this.label1.Size = new System.Drawing.Size(25, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Nombre";
+            this.label1.Text = "DPI";
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.nombrebtn);
+            this.tabPage1.Controls.Add(this.nombretxt);
+            this.tabPage1.Controls.Add(this.nombrelbl);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Size = new System.Drawing.Size(276, 183);
+            this.tabPage1.TabIndex = 3;
+            this.tabPage1.Text = "Buscar Nombre";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // nombretxt
+            // 
+            this.nombretxt.Location = new System.Drawing.Point(73, 22);
+            this.nombretxt.Name = "nombretxt";
+            this.nombretxt.Size = new System.Drawing.Size(172, 20);
+            this.nombretxt.TabIndex = 4;
+            // 
+            // nombrelbl
+            // 
+            this.nombrelbl.AutoSize = true;
+            this.nombrelbl.Location = new System.Drawing.Point(23, 25);
+            this.nombrelbl.Name = "nombrelbl";
+            this.nombrelbl.Size = new System.Drawing.Size(44, 13);
+            this.nombrelbl.TabIndex = 3;
+            this.nombrelbl.Text = "Nombre";
+            // 
+            // dpibtn
+            // 
+            this.dpibtn.Location = new System.Drawing.Point(25, 64);
+            this.dpibtn.Name = "dpibtn";
+            this.dpibtn.Size = new System.Drawing.Size(219, 100);
+            this.dpibtn.TabIndex = 2;
+            this.dpibtn.Text = "Buscar";
+            this.dpibtn.UseVisualStyleBackColor = true;
+            this.dpibtn.Click += new System.EventHandler(this.dpibtn_Click);
+            // 
+            // nombrebtn
+            // 
+            this.nombrebtn.Location = new System.Drawing.Point(26, 62);
+            this.nombrebtn.Name = "nombrebtn";
+            this.nombrebtn.Size = new System.Drawing.Size(219, 100);
+            this.nombrebtn.TabIndex = 5;
+            this.nombrebtn.Text = "Buscar";
+            this.nombrebtn.UseVisualStyleBackColor = true;
+            this.nombrebtn.Click += new System.EventHandler(this.nombrebtn_Click);
             // 
             // Form1
             // 
@@ -121,6 +165,8 @@
             this.edTabControl.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -132,9 +178,13 @@
         private System.Windows.Forms.Label showmslbl;
         private System.Windows.Forms.TabControl edTabControl;
         private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.Button buscarbtn;
-        private System.Windows.Forms.TextBox nombretxt;
+        private System.Windows.Forms.TextBox dpitxt;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TextBox nombretxt;
+        private System.Windows.Forms.Label nombrelbl;
+        private System.Windows.Forms.Button dpibtn;
+        private System.Windows.Forms.Button nombrebtn;
     }
 }
 
