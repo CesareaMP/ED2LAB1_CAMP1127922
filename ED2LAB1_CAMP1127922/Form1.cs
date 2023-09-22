@@ -20,6 +20,7 @@ namespace ED2LAB1_CAMP1127922
         int inserts = 0;
         int deletes = 0;
         int patchs = 0;
+        Aritmetica code = new Aritmetica();
         public Form1()
         {
             InitializeComponent();
@@ -74,10 +75,11 @@ namespace ED2LAB1_CAMP1127922
                     var content = reader.ReadLine();
                     string action = content.Split(';')[0];
                     string info = content.Split(';')[1];
-                    var persona = JsonConvert.DeserializeObject<Person>(info);                                       
+                    var persona = JsonConvert.DeserializeObject<Person>(info);     
+                    persona.dpi=Convert.ToString(code.Encode(persona.dpi));
                     if (action == "INSERT") { arbol.Add(persona); inserts++; }                   
                     else if (action == "PATCH") { arbol.Patch(persona); patchs++; }
-                    else if (action == "DELETE") { arbol.Delete(persona); deletes++; }                  
+                    //else if (action == "DELETE") { arbol.Delete(persona); deletes++; }                  
                 }
             }
         }

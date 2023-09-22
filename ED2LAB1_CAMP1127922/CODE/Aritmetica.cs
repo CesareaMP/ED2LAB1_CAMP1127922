@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace ED2LAB1_CAMP1127922
 {
@@ -9,47 +11,53 @@ namespace ED2LAB1_CAMP1127922
         {
             return Encode(contexto, mensaje);
         }
-        public string Decode(string mensaje)
-        {
-            return Decode(mensaje, contexto);
-        }
+        //public string Decode(string mensaje)
+        //{
+        //    return Decode(mensaje, contexto);
+        //}
         private double Encode(string contexto, string mensaje)
         {
-            
+            double inf;
+            double sup;
+            double ant_inf=0;
+            double ant_sup;
+            double distancia = 1;
+            string[,] tabla = Probtable(GetDictionary(contexto));
+            string[] primero = FindLetter(tabla, mensaje[0]);
+            inf = double.Parse(primero[1]);
+            sup = double.Parse(primero[2]);
+            for (int i = 1; i < mensaje.Length; i++)
+            {
+                ant_inf = inf;
+                ant_sup = sup;
+                distancia = ant_sup - ant_inf;
+                inf = distancia * double.Parse(FindLetter(tabla, mensaje[i])[1]) + ant_inf;
+                sup = distancia * double.Parse(FindLetter(tabla, mensaje[i])[2]) + ant_inf;                
+            }
+            return double.Parse(FindLetter(tabla, mensaje[0])[2]) * distancia + ant_inf;
         }
 
-        public string Decode(string mensaje, string contexto)
+        //public string Decode(string mensaje, string contexto)
+        //{
+
+        //}
+
+        public string[] FindLetter(string[,] arr, char letra)
         {
-            Dictionary<char, double> probabilidadDiccionario = GetDictionary(contexto);
-            string[,] tabla = Probtable(probabilidadDiccionario);
-
-            double valor = 0;
-            double rango = 1;
-            string mensajeDecodificado = "";
-
-            foreach (char c in mensaje)
+            for (int i = 0; i < arr.Length; i++)
             {
-                for (int i = 0; i < tabla.GetLength(0); i++)
+                if (Convert.ToChar(arr[i, 0]) == letra)
                 {
-                    char caracter = tabla[i, 0][0];
-                    double inf = double.Parse(tabla[i, 1]);
-                    double sup = double.Parse(tabla[i, 2]);
-
-                    double nuevoRango = rango * (sup - inf);
-                    if (valor >= inf * rango && valor < sup * rango)
-                    {
-                        mensajeDecodificado += caracter;
-                        valor = (valor - inf * rango) / (sup - inf);
-                        rango = nuevoRango;
-                        break;
-                    }
+                    string[] probs={
+                        arr[i, 0],
+                        arr[i,1],
+                        arr[i,2]
+                    };
+                    return probs;               
                 }
             }
-
-            return mensajeDecodificado;
+            return null;
         }
-
-
         private Dictionary<char, double> GetDictionary(string contexto)
         {
             Dictionary<char, double> miDiccionario = new Dictionary<char, double>();

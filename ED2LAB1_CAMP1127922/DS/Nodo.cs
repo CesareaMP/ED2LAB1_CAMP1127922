@@ -13,10 +13,8 @@ namespace ED2LAB1_CAMP1127922.DS
         public Nodo izquierda { get; set; }
         public Nodo derecha { get; set; }
         public int FactorEquilibrio { get; set; }
-        Aritmetica code=new Aritmetica();
-        public Nodo(Person p) {
-            p.dpi = Convert.ToString(code.Encode(p.dpi));
-            string decode = code.Decode(p.dpi);
+        
+        public Nodo(Person p) {                        
             persona = p;    
             izquierda =null; 
             derecha=null;
