@@ -79,7 +79,7 @@ namespace ED2LAB1_CAMP1127922
                     persona.dpi=Convert.ToString(code.Encode(persona.dpi));
                     if (action == "INSERT") { arbol.Add(persona); inserts++; }                   
                     else if (action == "PATCH") { arbol.Patch(persona); patchs++; }
-                    //else if (action == "DELETE") { arbol.Delete(persona); deletes++; }                  
+                    else if (action == "DELETE") { arbol.Delete(persona); deletes++; }
                 }
             }
         }

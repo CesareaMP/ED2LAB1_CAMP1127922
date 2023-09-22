@@ -1,20 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace ED2LAB1_CAMP1127922
 {
-    internal class Aritmetica
-    {
+    internal class Aritmetica { 
+    //{
+    //    CODIFICAR
+    //    {
+    //    Superior=distancia* limite de la letra superior + limite inferior anterior del mensaje
+    //    Inferior = distancia * limite de la letra inferior + limite inferior anterior del menssje
+    //    Respuesta = superior de la primera letra en la tabla de probabilidades* distancia + inferior anterior
+    //    }
+
+    //DECODIFICAR
+    //    {
+    //    DECODIFICAR=(Codigo-limite inferior de la letra a la que corresponde)/probabilidad
+    //    probabilidad = superior - inferior
+    //    }
         private string contexto = "ParkerIncConn-HuelsHickleZiemannandLegrosNolanLLCMcDermottCummerataandThompsonWelch-ShieldsO'HaraandSonsParisianGleichnerandCollinsMooreandSonsGottlieb-SporerSchillerFadelandGislasonRoweLLCTremblayIncSchuppeD'AmoreandHilpertDickinson-NikolausVandervort-WeimannJenkins-DouglasLindIncConnelly-SwaniawskiBlockandSonsEmardLLCDaughertyGroupHermistonLakinandJacobiSwift-VolkmanWunschLLCWitting-BeckerJonesGradyandBreitenbergZiemann-BorerUptonLLCBarrowsandSonsMaggioLLCDaniel-FraneyStehr-LangoshGaylordSchillerandMurrayPollichandSonsSchusterOlsonandDoyleTurnerLLCJacobs-FarrellLakin-AltenwerthMante-LeschKubandSonsMayerBlockandGaylordPagac-BoscoWisozk-StrosinCassinKreigerandMcKenzieCorkery-RosenbaumMarvin-LegrosGislasonGroupMertzCasperandHirtheZiemannandSons6904153067807613780749283707265854661409267524316425109972346";
         public double Encode(string mensaje)
         {
             return Encode(contexto, mensaje);
         }
-        //public string Decode(string mensaje)
-        //{
-        //    return Decode(mensaje, contexto);
-        //}
+        public string Decode(string mensaje)
+        {
+            return Decode(mensaje, contexto);
+        }
         private double Encode(string contexto, string mensaje)
         {
             double inf;
@@ -37,10 +50,10 @@ namespace ED2LAB1_CAMP1127922
             return double.Parse(FindLetter(tabla, mensaje[0])[2]) * distancia + ant_inf;
         }
 
-        //public string Decode(string mensaje, string contexto)
-        //{
-
-        //}
+        public string Decode(string mensaje, string contexto)
+        {
+            return "";
+        }
 
         public string[] FindLetter(string[,] arr, char letra)
         {
