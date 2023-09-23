@@ -1,5 +1,4 @@
-﻿using ExtendedNumerics;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Numerics;
@@ -21,12 +20,12 @@ namespace ED2LAB1_CAMP1127922
     //    DECODIFICAR=(Codigo-limite inferior de la letra a la que corresponde)/probabilidad
     //    probabilidad = superior - inferior
     //    }
-        private string contexto = "ParkerIncConn-HuelsHickleZiemannandLegrosNolanLLCMcDermottCummerataandThompsonWelch-ShieldsO'HaraandSonsParisianGleichnerandCollinsMooreandSonsGottlieb-SporerSchillerFadelandGislasonRoweLLCTremblayIncSchuppeD'AmoreandHilpertDickinson-NikolausVandervort-WeimannJenkins-DouglasLindIncConnelly-SwaniawskiBlockandSonsEmardLLCDaughertyGroupHermistonLakinandJacobiSwift-VolkmanWunschLLCWitting-BeckerJonesGradyandBreitenbergZiemann-BorerUptonLLCBarrowsandSonsMaggioLLCDaniel-FraneyStehr-LangoshGaylordSchillerandMurrayPollichandSonsSchusterOlsonandDoyleTurnerLLCJacobs-FarrellLakin-AltenwerthMante-LeschKubandSonsMayerBlockandGaylordPagac-BoscoWisozk-StrosinCassinKreigerandMcKenzieCorkery-RosenbaumMarvin-LegrosGislasonGroupMertzCasperandHirtheZiemannandSons69041530678076137807492837072658546614092675243164251099723466904153067807613780749283707265854661409267524316425109972346";
+        private string contexto = "Parker Inc, Conn - Huels, Hickle Ziemann and Legros, Nolan LLC, McDermott Cummerata and Thompson, Welch - Shields, O'Hara and Sons, Parisian Gleichner and Collins, Moore and Sons, Gottlieb - Sporer, Schiller Fadel and Gislason, Rowe LLC, Tremblay Inc, Schuppe D'Amore and Hilpert, Dickinson - Nikolaus, Vandervort - Weimann, Jenkins - Douglas, Lind Inc, Connelly - Swaniawski, Block and Sons, Emard LLC, Daugherty Group, Hermiston Lakin and Jacobi, Swift - Volkman, Wunsch LLC, Witting - Becker, Jones Grady and Breitenberg, Ziemann - Borer, Upton LLC, Barrows and Sons, Maggio LLC, Daniel - Franey, Stehr - Langosh, Gaylord Schiller and Murray, Pollich and Sons, Schuster Olson and Doyle, Turner LLC, Jacobs - Farrell, Lakin - Altenwerth, Mante - Lesch, Kub and Sons, Mayer Block and Gaylord, Pagac - Bosco, Wisozk - Strosin, Cassin Kreiger and McKenzie, Corkery - Rosenbaum, Marvin - Legros, Gislason Group, Mertz Casper and Hirthe, Ziemann and Sons, 69041530678076137807492837072658546614092675243164251099723466904153067807613780749283707265854661409267524316425109972346";
         public decimal Encode(string mensaje)
         {
             return Encode(contexto, mensaje);
         }
-        public string Decode(decimal mensaje)
+        public string Decode(string mensaje)
         {
             return Decode(mensaje, contexto);
         }
@@ -35,8 +34,7 @@ namespace ED2LAB1_CAMP1127922
             decimal inf;
             decimal sup;            
             decimal ant_inf=0;
-            decimal ant_sup;
-            decimal distancia = 1;
+            decimal ant_sup=0;
             string[,] tabla = Probtable(contexto);
             string[] primero = FindLetter(tabla, mensaje[0]);
             inf = decimal.Parse(primero[1]);
@@ -45,20 +43,22 @@ namespace ED2LAB1_CAMP1127922
             {
                 ant_inf = inf;
                 ant_sup = sup;
-                distancia = ant_sup - ant_inf;
-                inf = distancia * decimal.Parse(FindLetter(tabla, mensaje[i])[1]) + ant_inf;
-                sup = distancia * decimal.Parse(FindLetter(tabla, mensaje[i])[2]) + ant_inf;                
+                inf = ant_inf + (ant_sup - ant_inf) * decimal.Parse(FindLetter(tabla, mensaje[i])[1]);             
+                sup = ant_inf + (ant_sup - ant_inf) * decimal.Parse(FindLetter(tabla, mensaje[i])[2]);             
             }
-            return decimal.Parse(FindLetter(tabla, mensaje[0])[2]) * distancia + ant_inf+mensaje.Length;
+            ant_inf = inf;
+            ant_sup = sup;
+            return decimal.Parse(FindLetter(tabla, mensaje[0])[2]) * (ant_sup - ant_inf) + ant_inf+mensaje.Length;
         }
 
-        public string Decode(decimal info, string contexto)
+        public string Decode(string info, string contexto)
         {
-            int longitud = (int)Math.Floor(info);
-            decimal codigo = info - longitud;
+            decimal conversion=decimal.Parse(info);
+            int longitud = (int)Math.Floor(conversion);
+            decimal codigo = conversion - longitud;
             string decodificado = "";
             string[,] tablaprobs = Probtable(contexto);
-            for (int i = 0; i < longitud; i++)
+            for (int i = 0; i <longitud; i++)
             {
                 string[] probs = FindInRange(tablaprobs, codigo);
                 decodificado += probs[0];

@@ -17,6 +17,8 @@ namespace ED2LAB1_CAMP1127922
     public partial class Form1 : Form
     {
         ABB arbol = new ABB();
+        string rutaArchivo;
+        string rutaCarpeta;
         int inserts = 0;
         int deletes = 0;
         int patchs = 0;
@@ -32,39 +34,34 @@ namespace ED2LAB1_CAMP1127922
 
         private void button1_Click(object sender, EventArgs e)
         {
+            try
+            {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Archivos CSV (*.csv)|*.csv";
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                string rutaArchivo = openFileDialog.FileName;
+                rutaArchivo = openFileDialog.FileName;
                 Stopwatch stopwatch = new Stopwatch();
-
                 stopwatch.Start();
                 CargarDatosDesdeCSV(rutaArchivo);
+                crearCSV(rutaArchivo, "ARBOL_CODIFICADO", arbol.PrintTree());
                 stopwatch.Stop();
                 long elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
                 showmslbl.Text = $"{elapsedMilliseconds}ms";
-
-
                 button1.Enabled = false;
                 button1.Text = "Archivo cargado satisfactoriamente";
-                edTabControl.Enabled = true;
-                try
-                {
-                   
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("El archivo cargado es imposible de leer");
-                }
-                
+                edTabControl.Enabled = true;    
             }
             else
             {
                 MessageBox.Show("Seleccione el archivo a utilizar");
             }
-
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("El archivo cargado es imposible de leer");
+            }
         }
         private void CargarDatosDesdeCSV(string rutaArchivo)
         {
@@ -76,137 +73,92 @@ namespace ED2LAB1_CAMP1127922
                     string action = content.Split(';')[0];
                     string info = content.Split(';')[1];
                     var persona = JsonConvert.DeserializeObject<Person>(info);     //4981559841093
-                    persona.dpi=Convert.ToString(code.Encode(persona.dpi));                    
+                    persona.dpi=Convert.ToString(code.Encode(persona.dpi));
+                    for (int i = 0; i < persona.companies.Count; i++)
+                    {
+                        persona.companies[i] = Convert.ToString(code.Encode(persona.companies[i]));
+                    }
                     if (action == "INSERT") { arbol.Add(persona); inserts++; }                   
                     else if (action == "PATCH") { arbol.Patch(persona); patchs++; }
-                    //else if (action == "DELETE") { arbol.Delete(persona); deletes++; }
+                    else if (action == "DELETE") { arbol.Delete(persona); deletes++; }
                 }
             }
-        }
+        }        
 
         private void groupBox1_Enter(object sender, EventArgs e)
         {
 
-        }
-
-        private void buscarbtn_Click(object sender, EventArgs e)
+        }        
+        public void crearCSV(string ruta, string nombreArchivo, List<string> jsons)
         {
-            string dpi = dpitxt.Text;
-            List<Person> listabusquedas = new List<Person>();
-            Person aux;
-            List<string> jsons = new List<string>();
-            int cont = 0;
-            if (nombretxt.Text == "") MessageBox.Show("Ingrese un nombre a buscar");
-            else
+            int indiceUltimaDiagonal = ruta.LastIndexOf('\\');
+            ruta = ruta.Substring(0, indiceUltimaDiagonal) + "\\Exports";
+            CrearCarpeta(ruta);
+            try
             {
-                listabusquedas.Add(arbol.SearchDpi(dpi));
-                if (listabusquedas != null)
-                {
-                    cont = listabusquedas.Count();
-                    for (int i = 0; i < cont; i++)
-                    {
-                        aux = listabusquedas[i];
-                        var objpersona = new Person
-                        {
-                            name = aux.name,
-                            dpi = aux.dpi,
-                            datebirth = aux.datebirth,
-                            address = aux.address,
-                            companies = aux.companies
-                        };
-                        string jsonString = JsonConvert.SerializeObject(objpersona, Formatting.None);
+                string filePath = Path.Combine(ruta, nombreArchivo + ".csv");
 
-                        jsons.Add(jsonString);
+                using (StreamWriter writer = new StreamWriter(filePath))
+                {
+                    foreach (string json in jsons)
+                    {
+                        writer.WriteLine(json);
                     }
-                    crearCSV(dpi, jsons);
                 }
-                else MessageBox.Show("no se encontraron datos asociados al dpi" + dpi);
+
+                MessageBox.Show("Archivo CSV creado exitosamente en " + filePath);
+                Process.Start(filePath); // Abrir el archivo creado
             }
-            dpitxt.Text = "";
-        }
-        public void crearCSV(string nombre, List<string> jsons)
-        {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Archivos CSV|*.csv";
-            saveFileDialog.Title = "Guardar archivo CSV, nombre sugerido: " + nombre;
-
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            catch (Exception ex)
             {
-                try
-                {
-                    using (StreamWriter writer = new StreamWriter(saveFileDialog.FileName))
-                    {
-                        foreach (string json in jsons)
-                        {
-                            writer.WriteLine(json);
-                        }
-                    }
-
-                    MessageBox.Show("Archivo CSV creado exitosamente.");
-                    Process.Start(saveFileDialog.FileName);//abre el archivo creado
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error al crear el archivo CSV: " + ex.Message);
-                }
+                MessageBox.Show("Error al crear el archivo CSV: " + ex.Message);
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        public void CrearCarpeta(string ruta)
         {
-            string nombre = nombretxt.Text;
-            List<Person> listabusquedas = new List<Person>();
-            Person aux;
-            List<string> jsons = new List<string>();
-            int cont = 0;
-            if (nombretxt.Text == "") MessageBox.Show("Ingrese un nombre a buscar");
-            else
+            try
             {
-                listabusquedas = arbol.SearchName(nombre);
-                if (listabusquedas != null)
+                // Verifica si la carpeta no existe en la ruta proporcionada.
+                if (!Directory.Exists(ruta))
                 {
-                    cont = listabusquedas.Count();
-                    for (int i = 0; i < cont; i++)
-                    {
-                        aux = listabusquedas[i];
-                        var objpersona = new Person
-                        {
-                            name = aux.name,
-                            dpi = aux.dpi,
-                            datebirth = aux.datebirth,
-                            address = aux.address,
-                            companies = aux.companies
-                        };
-                        string jsonString = JsonConvert.SerializeObject(objpersona, Formatting.None);
-
-                        jsons.Add(jsonString);
-                    }
-                    crearCSV(nombre, jsons);
+                    // Crea la carpeta si no existe.
+                    Directory.CreateDirectory(ruta);
+                    Console.WriteLine("Carpeta creada en: " + ruta);
                 }
-                else MessageBox.Show("no se encontraron datos asociados al nombre de " + nombre);
+                else
+                {
+                    Console.WriteLine("La carpeta ya existe en: " + ruta);
+                }
             }
-            nombretxt.Text = "";
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al crear la carpeta: " + ex.Message);
+            }
         }
 
         private void dpibtn_Click(object sender, EventArgs e)
         {
-            string dpi = dpitxt.Text;
-            long dpinum = Int64.Parse(dpi) + 1;
-            dpi = Convert.ToString(dpinum);
+            string dpi = Convert.ToString(code.Encode(dpitxt.Text));
             Person persona;
             string jsonString;
-            dpi = code.Decode(decimal.Parse(Convert.ToString(code.Encode(dpi))));
             if (dpitxt.Text == "") MessageBox.Show("Ingrese un nombre a buscar");
             else
             {
-                persona = arbol.SearchDpi(dpi);
+                persona = arbol.SearchDpi(dpi);                
                 if (persona != null)
                 {
+                    persona.dpi = code.Decode(dpi);
+                    for (int i = 0; i < persona.companies.Count; i++)
+                    {
+                        persona.companies[i] = code.Decode(persona.companies[i]);
+                    }
                     jsonString = JsonConvert.SerializeObject(persona, Formatting.Indented);
                     MessageBox.Show(jsonString);
                 }
                 else MessageBox.Show("No se encontraron datos asociados al DPI: " + dpi);
-            }                   
+            }
+            dpitxt.Text = "";
         }
 
         private void nombrebtn_Click(object sender, EventArgs e)
@@ -238,7 +190,7 @@ namespace ED2LAB1_CAMP1127922
 
                         jsons.Add(jsonString);
                     }
-                    crearCSV(nombre, jsons);
+                    crearCSV(rutaArchivo,nombre, jsons);
                 }
                 else MessageBox.Show("no se encontraron datos asociados al nombre de " + nombre);
             }

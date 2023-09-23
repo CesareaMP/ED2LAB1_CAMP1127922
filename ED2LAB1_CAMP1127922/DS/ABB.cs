@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -31,7 +32,10 @@ namespace ED2LAB1_CAMP1127922.DS
         {
            return RecorrerArbolYBuscar(raiz, nombre);
         }
-
+        public List<string> PrintTree()
+        {
+            return PrintTree(raiz);
+        }
         private Nodo Add(Nodo nodo, Person nuevaPersona)
         {
             if (nodo == null)
@@ -181,6 +185,17 @@ namespace ED2LAB1_CAMP1127922.DS
             }
 
             return personasEncontradas;
+        }
+        private List<string> PrintTree(Nodo nodo)
+        {
+            List<string> Tree = new List<string>();
+            if (nodo != null)
+            {
+                Tree.AddRange(PrintTree(nodo.izquierda)); // Recorre el subárbol izquierdo                
+                    Tree.Add(JsonConvert.SerializeObject(nodo.persona, Formatting.None)); // Agrega la persona a la lista
+                Tree.AddRange(PrintTree(nodo.derecha)); // Recorre el subárbol derecho
+            }
+            return Tree;
         }
        
         private Nodo EncontrarMinimo(Nodo nodo)
