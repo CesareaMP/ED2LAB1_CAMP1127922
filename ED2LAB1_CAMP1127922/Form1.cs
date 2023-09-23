@@ -75,11 +75,11 @@ namespace ED2LAB1_CAMP1127922
                     var content = reader.ReadLine();
                     string action = content.Split(';')[0];
                     string info = content.Split(';')[1];
-                    var persona = JsonConvert.DeserializeObject<Person>(info);     
-                    persona.dpi=Convert.ToString(code.Encode(persona.dpi));
+                    var persona = JsonConvert.DeserializeObject<Person>(info);     //4981559841093
+                    persona.dpi=Convert.ToString(code.Encode(persona.dpi));                    
                     if (action == "INSERT") { arbol.Add(persona); inserts++; }                   
                     else if (action == "PATCH") { arbol.Patch(persona); patchs++; }
-                    else if (action == "DELETE") { arbol.Delete(persona); deletes++; }
+                    //else if (action == "DELETE") { arbol.Delete(persona); deletes++; }
                 }
             }
         }
@@ -191,8 +191,11 @@ namespace ED2LAB1_CAMP1127922
         private void dpibtn_Click(object sender, EventArgs e)
         {
             string dpi = dpitxt.Text;
+            long dpinum = Int64.Parse(dpi) + 1;
+            dpi = Convert.ToString(dpinum);
             Person persona;
             string jsonString;
+            dpi = code.Decode(decimal.Parse(Convert.ToString(code.Encode(dpi))));
             if (dpitxt.Text == "") MessageBox.Show("Ingrese un nombre a buscar");
             else
             {
