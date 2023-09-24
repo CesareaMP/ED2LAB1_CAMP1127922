@@ -45,7 +45,7 @@ namespace ED2LAB1_CAMP1127922
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
                 CargarDatosDesdeCSV(rutaArchivo);
-                crearCSV(rutaArchivo, "ARBOL_CODIFICADO", arbol.PrintTree());
+                //crearCSV(rutaArchivo, "ARBOL_CODIFICADO", arbol.PrintTree());
                 stopwatch.Stop();
                 long elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
                 showmslbl.Text = $"{elapsedMilliseconds}ms";
@@ -72,11 +72,11 @@ namespace ED2LAB1_CAMP1127922
                     var content = reader.ReadLine();
                     string action = content.Split(';')[0];
                     string info = content.Split(';')[1];
-                    var persona = JsonConvert.DeserializeObject<Person>(info);     //4981559841093
-                    persona.dpi=Convert.ToString(code.Encode(persona.dpi));
+                    var persona = JsonConvert.DeserializeObject<Person>(info);
+                    persona.dpi=code.Encode(persona.dpi);
                     for (int i = 0; i < persona.companies.Count; i++)
                     {
-                        persona.companies[i] = Convert.ToString(code.Encode(persona.companies[i]));
+                        persona.companies[i] = code.Encode(persona.companies[i]);
                     }
                     if (action == "INSERT") { arbol.Add(persona); inserts++; }                   
                     else if (action == "PATCH") { arbol.Patch(persona); patchs++; }
@@ -139,7 +139,7 @@ namespace ED2LAB1_CAMP1127922
 
         private void dpibtn_Click(object sender, EventArgs e)
         {
-            string dpi = Convert.ToString(code.Encode(dpitxt.Text));
+            string dpi = code.Encode(dpitxt.Text);
             Person persona;
             string jsonString;
             if (dpitxt.Text == "") MessageBox.Show("Ingrese un nombre a buscar");
@@ -156,7 +156,7 @@ namespace ED2LAB1_CAMP1127922
                     jsonString = JsonConvert.SerializeObject(persona, Formatting.Indented);
                     MessageBox.Show(jsonString);
                 }
-                else MessageBox.Show("No se encontraron datos asociados al DPI: " + dpi);
+                else MessageBox.Show("No se encontraron datos asociados al DPI: " + dpitxt.Text);
             }
             dpitxt.Text = "";
         }

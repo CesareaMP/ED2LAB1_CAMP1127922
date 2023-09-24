@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Numerics;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
@@ -21,7 +22,7 @@ namespace ED2LAB1_CAMP1127922
     //    probabilidad = superior - inferior
     //    }
         private string contexto = "Parker Inc, Conn - Huels, Hickle Ziemann and Legros, Nolan LLC, McDermott Cummerata and Thompson, Welch - Shields, O'Hara and Sons, Parisian Gleichner and Collins, Moore and Sons, Gottlieb - Sporer, Schiller Fadel and Gislason, Rowe LLC, Tremblay Inc, Schuppe D'Amore and Hilpert, Dickinson - Nikolaus, Vandervort - Weimann, Jenkins - Douglas, Lind Inc, Connelly - Swaniawski, Block and Sons, Emard LLC, Daugherty Group, Hermiston Lakin and Jacobi, Swift - Volkman, Wunsch LLC, Witting - Becker, Jones Grady and Breitenberg, Ziemann - Borer, Upton LLC, Barrows and Sons, Maggio LLC, Daniel - Franey, Stehr - Langosh, Gaylord Schiller and Murray, Pollich and Sons, Schuster Olson and Doyle, Turner LLC, Jacobs - Farrell, Lakin - Altenwerth, Mante - Lesch, Kub and Sons, Mayer Block and Gaylord, Pagac - Bosco, Wisozk - Strosin, Cassin Kreiger and McKenzie, Corkery - Rosenbaum, Marvin - Legros, Gislason Group, Mertz Casper and Hirthe, Ziemann and Sons, 69041530678076137807492837072658546614092675243164251099723466904153067807613780749283707265854661409267524316425109972346";
-        public decimal Encode(string mensaje)
+        public string Encode(string mensaje)
         {
             return Encode(contexto, mensaje);
         }
@@ -29,43 +30,57 @@ namespace ED2LAB1_CAMP1127922
         {
             return Decode(mensaje, contexto);
         }
-        private decimal Encode(string contexto, string mensaje)
+        private string Encode(string contexto, string mensaje)
         {
-            decimal inf;
-            decimal sup;            
+            decimal inf=0;
+            decimal sup=0;            
             decimal ant_inf=0;
-            decimal ant_sup=0;
+            decimal ant_sup=0;            
+            string splitmessage = split15(mensaje);
+            int splitcount = splitmessage.Split('|').Count()-1;
             string[,] tabla = Probtable(contexto);
-            string[] primero = FindLetter(tabla, mensaje[0]);
-            inf = decimal.Parse(primero[1]);
-            sup = decimal.Parse(primero[2]);
-            for (int i = 1; i < mensaje.Length; i++)
+            string cadenacodigo = "";
+            for (int j = 0; j < splitcount; j++)
             {
+                string messagepos = splitmessage.Split('|')[j];
+                string[] primero = FindLetter(tabla, messagepos[0]);
+                inf = decimal.Parse(primero[1]);
+                sup = decimal.Parse(primero[2]);
+                for (int i = 1; i < messagepos.Length; i++)
+                {
+                    ant_inf = inf;
+                    ant_sup = sup;
+                    inf = ant_inf + (ant_sup - ant_inf) * decimal.Parse(FindLetter(tabla, messagepos[i])[1]);
+                    sup = ant_inf + (ant_sup - ant_inf) * decimal.Parse(FindLetter(tabla, messagepos[i])[2]);
+                }
                 ant_inf = inf;
                 ant_sup = sup;
-                inf = ant_inf + (ant_sup - ant_inf) * decimal.Parse(FindLetter(tabla, mensaje[i])[1]);             
-                sup = ant_inf + (ant_sup - ant_inf) * decimal.Parse(FindLetter(tabla, mensaje[i])[2]);             
+                cadenacodigo += Convert.ToString(decimal.Parse(FindLetter(tabla, mensaje[0])[2]) * (ant_sup - ant_inf) + ant_inf + messagepos.Length) + "|";
             }
-            ant_inf = inf;
-            ant_sup = sup;
-            return decimal.Parse(FindLetter(tabla, mensaje[0])[2]) * (ant_sup - ant_inf) + ant_inf+mensaje.Length;
+            
+            return cadenacodigo;
         }
-
+        
         public string Decode(string info, string contexto)
         {
-            decimal conversion=decimal.Parse(info);
-            int longitud = (int)Math.Floor(conversion);
-            decimal codigo = conversion - longitud;
+            int splitcount = info.Split('|').Count() - 1;
             string decodificado = "";
-            string[,] tablaprobs = Probtable(contexto);
-            for (int i = 0; i <longitud; i++)
+            for (int j = 0; j < splitcount; j++)
             {
-                string[] probs = FindInRange(tablaprobs, codigo);
-                decodificado += probs[0];
-                decimal inf = decimal.Parse(probs[1]);
-                decimal sup = decimal.Parse(probs[2]);
-                codigo = (codigo - inf) / (sup - inf);
-            }            
+                string aux = info.Split('|')[j];
+                decimal conversion = decimal.Parse(aux);
+                int longitud = (int)Math.Floor(conversion);//15.871679192298956230059392070|1.6262766901027582477014602488|
+                decimal codigo = conversion - longitud;               
+                string[,] tablaprobs = Probtable(contexto);
+                for (int i = 0; i < longitud; i++)
+                {
+                    string[] probs = FindInRange(tablaprobs, codigo);
+                    decodificado += probs[0];
+                    decimal inf = decimal.Parse(probs[1]);
+                    decimal sup = decimal.Parse(probs[2]);
+                    codigo = (codigo - inf) / (sup - inf);
+                }
+            }
             return decodificado;
     }
         public string[] FindLetter(string[,] arr, char letra)
@@ -167,5 +182,18 @@ namespace ED2LAB1_CAMP1127922
             }
             return null;
         }
+        private string split15(string mensaje)
+        {
+            int longitudFragmento = 15;
+            string fragmento = "";
+            for (int i = 0; i < mensaje.Length; i += longitudFragmento)
+            {
+                int longitudRestante = mensaje.Length - i;
+                int longitudActual = Math.Min(longitudFragmento, longitudRestante);
+                fragmento += mensaje.Substring(i, longitudActual) + "|";
+            }
+            return fragmento;
+        }
+
     }
 }
