@@ -155,7 +155,13 @@ namespace ED2LAB1_CAMP1127922
                     }
                     jsonString = JsonConvert.SerializeObject(persona, Formatting.Indented);
                     MessageBox.Show(jsonString);
+                    persona.dpi = code.Encode(persona.dpi);
+                    for (int i = 0; i < persona.companies.Count; i++)
+                    {
+                        persona.companies[i] = code.Encode(persona.companies[i]);
+                    }
                 }
+
                 else MessageBox.Show("No se encontraron datos asociados al DPI: " + dpitxt.Text);
             }
             dpitxt.Text = "";

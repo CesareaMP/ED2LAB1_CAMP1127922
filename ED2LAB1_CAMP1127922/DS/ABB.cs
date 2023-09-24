@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ED2LAB1_CAMP1127922.DS
 {
-    public class ABB
+    internal class ABB
     {
         public Nodo raiz;
         public void Add(Person ndato)
