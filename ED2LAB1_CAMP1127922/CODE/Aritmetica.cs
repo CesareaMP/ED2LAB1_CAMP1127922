@@ -7,21 +7,26 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace ED2LAB1_CAMP1127922
 {
-    internal class Aritmetica { 
-    //{
-    //    CODIFICAR
-    //    {
-    //    Superior=distancia* limite de la letra superior + limite inferior anterior del mensaje
-    //    Inferior = distancia * limite de la letra inferior + limite inferior anterior del menssje
-    //    Respuesta = superior de la primera letra en la tabla de probabilidades* distancia + inferior anterior
-    //    }
+    internal class Aritmetica {
+        //{
+        //    CODIFICAR
+        //    {
+        //    Superior=distancia* limite de la letra superior + limite inferior anterior del mensaje
+        //    Inferior = distancia * limite de la letra inferior + limite inferior anterior del menssje
+        //    Respuesta = superior de la primera letra en la tabla de probabilidades* distancia + inferior anterior
+        //    }
 
-    //DECODIFICAR
-    //    {www
-    //    DECODIFICAR=(Codigo-limite inferior de la letra a la que corresponde)/probabilidad
-    //    probabilidad = superior - inferior
-    //    }
+        //DECODIFICAR
+        //    {www
+        //    DECODIFICAR=(Codigo-limite inferior de la letra a la que corresponde)/probabilidad
+        //    probabilidad = superior - inferior
+        //    }
         private string contexto = "Parker Inc, Conn - Huels, Hickle Ziemann and Legros, Nolan LLC, McDermott Cummerata and Thompson, Welch - Shields, O'Hara and Sons, Parisian Gleichner and Collins, Moore and Sons, Gottlieb - Sporer, Schiller Fadel and Gislason, Rowe LLC, Tremblay Inc, Schuppe D'Amore and Hilpert, Dickinson - Nikolaus, Vandervort - Weimann, Jenkins - Douglas, Lind Inc, Connelly - Swaniawski, Block and Sons, Emard LLC, Daugherty Group, Hermiston Lakin and Jacobi, Swift - Volkman, Wunsch LLC, Witting - Becker, Jones Grady and Breitenberg, Ziemann - Borer, Upton LLC, Barrows and Sons, Maggio LLC, Daniel - Franey, Stehr - Langosh, Gaylord Schiller and Murray, Pollich and Sons, Schuster Olson and Doyle, Turner LLC, Jacobs - Farrell, Lakin - Altenwerth, Mante - Lesch, Kub and Sons, Mayer Block and Gaylord, Pagac - Bosco, Wisozk - Strosin, Cassin Kreiger and McKenzie, Corkery - Rosenbaum, Marvin - Legros, Gislason Group, Mertz Casper and Hirthe, Ziemann and Sons, 69041530678076137807492837072658546614092675243164251099723466904153067807613780749283707265854661409267524316425109972346";
+        string[,] tabla;
+        public Aritmetica() {
+        tabla = Probtable(contexto);
+        }
+        
         public string Encode(string mensaje)
         {
             return Encode(contexto, mensaje);
@@ -38,7 +43,6 @@ namespace ED2LAB1_CAMP1127922
             decimal ant_sup=0;            
             string splitmessage = split15(mensaje);
             int splitcount = splitmessage.Split('|').Count()-1;
-            string[,] tabla = Probtable(contexto);
             string cadenacodigo = "";
             for (int j = 0; j < splitcount; j++)
             {
@@ -71,10 +75,9 @@ namespace ED2LAB1_CAMP1127922
                 decimal conversion = decimal.Parse(aux);
                 int longitud = (int)Math.Floor(conversion);//15.871679192298956230059392070|1.6262766901027582477014602488|
                 decimal codigo = conversion - longitud;               
-                string[,] tablaprobs = Probtable(contexto);
                 for (int i = 0; i < longitud; i++)
                 {
-                    string[] probs = FindInRange(tablaprobs, codigo);
+                    string[] probs = FindInRange(tabla, codigo);
                     decodificado += probs[0];
                     decimal inf = decimal.Parse(probs[1]);
                     decimal sup = decimal.Parse(probs[2]);
