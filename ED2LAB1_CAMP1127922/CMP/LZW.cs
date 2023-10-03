@@ -55,8 +55,15 @@ namespace ED2LAB1_CAMP1127922.CMP
 
         public string DECOMPRESS(string compress)
         {
-            return "";
+            string original = "";
+            int total = compress.Split(',').Count()-1;
+            int parte;
+            for (int i = 0; i < total; i++)
+            {
+                parte = int.Parse(compress.Split(',')[i]);
+                original += init.FirstOrDefault(x => x.Value == parte).Key;
+            }
+            return original;
         }
     }
-
 }

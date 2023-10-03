@@ -18,13 +18,13 @@ namespace ED2LAB1_CAMP1127922
     public partial class Form1 : Form
     {
         ABB arbol = new ABB();
+        Aritmetica code = new Aritmetica();
         LZW comp = new LZW();
         string rutaArchivo;
         string rutaCarpeta;
         int inserts = 0;
         int deletes = 0;
-        int patchs = 0;
-        Aritmetica code = new Aritmetica();
+        int patchs = 0;        
         public Form1()
         {
             InitializeComponent();
@@ -38,8 +38,8 @@ namespace ED2LAB1_CAMP1127922
         {
             try
             {
-                LZW compre = new LZW();
-                string asd= compre.COMPRESS("COMPADRE NO COMPRO COCO");
+                string asd= comp.COMPRESS("COMPADRE NO COMPRO COCO");
+                asd = comp.DECOMPRESS(asd);
                 OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Archivos CSV (*.csv)|*.csv";
                 string pruebasalv = comp.COMPRESS("ABBABBABBABB");
