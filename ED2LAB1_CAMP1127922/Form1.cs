@@ -1,4 +1,5 @@
-﻿using ED2LAB1_CAMP1127922.DS;
+﻿using ED2LAB1_CAMP1127922.CMP;
+using ED2LAB1_CAMP1127922.DS;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace ED2LAB1_CAMP1127922
     public partial class Form1 : Form
     {
         ABB arbol = new ABB();
+        LZW comp = new LZW();
         string rutaArchivo;
         string rutaCarpeta;
         int inserts = 0;
@@ -36,8 +38,12 @@ namespace ED2LAB1_CAMP1127922
         {
             try
             {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+                LZW compre = new LZW();
+                string asd= compre.COMPRESS("COMPADRE NO COMPRO COCO");
+                OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Archivos CSV (*.csv)|*.csv";
+                string pruebasalv = comp.COMPRESS("ABBABBABBABB");
+                pruebasalv = comp.DECOMPRESS(pruebasalv);
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
