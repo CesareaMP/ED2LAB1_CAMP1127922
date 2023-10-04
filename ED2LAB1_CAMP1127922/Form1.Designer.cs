@@ -32,16 +32,21 @@
             this.showmslbl = new System.Windows.Forms.Label();
             this.edTabControl = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.dpibtn = new System.Windows.Forms.Button();
             this.dpitxt = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.nombrebtn = new System.Windows.Forms.Button();
             this.nombretxt = new System.Windows.Forms.TextBox();
             this.nombrelbl = new System.Windows.Forms.Label();
-            this.dpibtn = new System.Windows.Forms.Button();
-            this.nombrebtn = new System.Windows.Forms.Button();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.buscartasbtn = new System.Windows.Forms.Button();
+            this.buscartastxt = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.edTabControl.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
@@ -50,7 +55,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(152, 78);
             this.button1.TabIndex = 0;
-            this.button1.Text = "Cargar Archivo";
+            this.button1.Text = "Cargar Archivo y Carpeta";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -67,6 +72,7 @@
             this.edTabControl.AllowDrop = true;
             this.edTabControl.Controls.Add(this.tabPage3);
             this.edTabControl.Controls.Add(this.tabPage1);
+            this.edTabControl.Controls.Add(this.tabPage2);
             this.edTabControl.Enabled = false;
             this.edTabControl.Location = new System.Drawing.Point(12, 96);
             this.edTabControl.Multiline = true;
@@ -86,6 +92,16 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Buscar Dpi";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // dpibtn
+            // 
+            this.dpibtn.Location = new System.Drawing.Point(25, 64);
+            this.dpibtn.Name = "dpibtn";
+            this.dpibtn.Size = new System.Drawing.Size(219, 100);
+            this.dpibtn.TabIndex = 2;
+            this.dpibtn.Text = "Buscar";
+            this.dpibtn.UseVisualStyleBackColor = true;
+            this.dpibtn.Click += new System.EventHandler(this.dpibtn_Click);
             // 
             // dpitxt
             // 
@@ -115,6 +131,16 @@
             this.tabPage1.Text = "Buscar Nombre";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // nombrebtn
+            // 
+            this.nombrebtn.Location = new System.Drawing.Point(26, 62);
+            this.nombrebtn.Name = "nombrebtn";
+            this.nombrebtn.Size = new System.Drawing.Size(219, 100);
+            this.nombrebtn.TabIndex = 5;
+            this.nombrebtn.Text = "Buscar";
+            this.nombrebtn.UseVisualStyleBackColor = true;
+            this.nombrebtn.Click += new System.EventHandler(this.nombrebtn_Click);
+            // 
             // nombretxt
             // 
             this.nombretxt.Location = new System.Drawing.Point(73, 22);
@@ -131,25 +157,43 @@
             this.nombrelbl.TabIndex = 3;
             this.nombrelbl.Text = "Nombre";
             // 
-            // dpibtn
+            // tabPage2
             // 
-            this.dpibtn.Location = new System.Drawing.Point(25, 64);
-            this.dpibtn.Name = "dpibtn";
-            this.dpibtn.Size = new System.Drawing.Size(219, 100);
-            this.dpibtn.TabIndex = 2;
-            this.dpibtn.Text = "Buscar";
-            this.dpibtn.UseVisualStyleBackColor = true;
-            this.dpibtn.Click += new System.EventHandler(this.dpibtn_Click);
+            this.tabPage2.Controls.Add(this.buscartasbtn);
+            this.tabPage2.Controls.Add(this.buscartastxt);
+            this.tabPage2.Controls.Add(this.label2);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Size = new System.Drawing.Size(276, 183);
+            this.tabPage2.TabIndex = 4;
+            this.tabPage2.Text = "Buscar Cartas";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // nombrebtn
+            // buscartasbtn
             // 
-            this.nombrebtn.Location = new System.Drawing.Point(26, 62);
-            this.nombrebtn.Name = "nombrebtn";
-            this.nombrebtn.Size = new System.Drawing.Size(219, 100);
-            this.nombrebtn.TabIndex = 5;
-            this.nombrebtn.Text = "Buscar";
-            this.nombrebtn.UseVisualStyleBackColor = true;
-            this.nombrebtn.Click += new System.EventHandler(this.nombrebtn_Click);
+            this.buscartasbtn.Location = new System.Drawing.Point(35, 66);
+            this.buscartasbtn.Name = "buscartasbtn";
+            this.buscartasbtn.Size = new System.Drawing.Size(208, 96);
+            this.buscartasbtn.TabIndex = 2;
+            this.buscartasbtn.Text = "Buscar";
+            this.buscartasbtn.UseVisualStyleBackColor = true;
+            this.buscartasbtn.Click += new System.EventHandler(this.buscartasbtn_Click);
+            // 
+            // buscartastxt
+            // 
+            this.buscartastxt.Location = new System.Drawing.Point(101, 29);
+            this.buscartastxt.Name = "buscartastxt";
+            this.buscartastxt.Size = new System.Drawing.Size(142, 20);
+            this.buscartastxt.TabIndex = 1;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(32, 32);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(63, 13);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Ingrese DPI";
             // 
             // Form1
             // 
@@ -167,6 +211,8 @@
             this.tabPage3.PerformLayout();
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -185,6 +231,10 @@
         private System.Windows.Forms.Label nombrelbl;
         private System.Windows.Forms.Button dpibtn;
         private System.Windows.Forms.Button nombrebtn;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.Button buscartasbtn;
+        private System.Windows.Forms.TextBox buscartastxt;
+        private System.Windows.Forms.Label label2;
     }
 }
 

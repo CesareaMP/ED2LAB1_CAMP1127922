@@ -41,9 +41,9 @@ namespace ED2LAB1_CAMP1127922
                 string asd= comp.COMPRESS("COMPADRE NO COMPRO COCO");
                 asd = comp.DECOMPRESS(asd);
                 OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Archivos CSV (*.csv)|*.csv";
+                openFileDialog.Filter = "Archivos CSV (*.csv)|*.csv";
                 string pruebasalv = comp.COMPRESS("ABBABBABBABB");
-                pruebasalv = comp.DECOMPRESS(pruebasalv);
+                pruebasalv = comp.DECOMPRESS(pruebasalv);                
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
@@ -207,6 +207,44 @@ namespace ED2LAB1_CAMP1127922
                 else MessageBox.Show("no se encontraron datos asociados al nombre de " + nombre);
             }
             nombretxt.Text = "";
+        }
+
+        static List<string> ObtenerArchivos(string parteNombre)
+        {
+            List<string> contenidoArchivos = new List<string>();
+
+            using (var dialog = new FolderBrowserDialog())
+            {
+                dialog.Description = "Selecciona la carpeta";
+                DialogResult result = dialog.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.SelectedPath))
+                {
+                    string rutaCarpeta = dialog.SelectedPath;
+                    string[] archivos = Directory.GetFiles(rutaCarpeta, "*" + parteNombre + "*.txt");
+
+                    foreach (string archivoEncontrado in archivos)
+                    {
+                        try
+                        {
+                            string contenido = File.ReadAllText(archivoEncontrado);
+                            contenidoArchivos.Add(contenido);
+                            Console.WriteLine("Se ha leído el archivo " + archivoEncontrado + ".");
+                        }
+                        catch (IOException e)
+                        {
+                            Console.WriteLine("Error al abrir el archivo " + archivoEncontrado + ": " + e.Message);
+                        }
+                    }
+                }
+            }
+
+            return contenidoArchivos;
+        }
+
+        private void buscartasbtn_Click(object sender, EventArgs e)
+        {
+            List<string> cartas = ObtenerArchivos(buscartastxt.Text);
         }
     }
 }
