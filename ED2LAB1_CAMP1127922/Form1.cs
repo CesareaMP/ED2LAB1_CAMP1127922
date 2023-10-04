@@ -22,9 +22,8 @@ namespace ED2LAB1_CAMP1127922
         LZW comp = new LZW();
         string rutaArchivo;
         string rutaCarpeta;
-        int inserts = 0;
-        int deletes = 0;
-        int patchs = 0;        
+        string rutaCarpetaCartas=null;
+        List<string> REC;       
         public Form1()
         {
             InitializeComponent();
@@ -45,7 +44,7 @@ namespace ED2LAB1_CAMP1127922
                 string pruebasalv = comp.COMPRESS("ABBABBABBABB");
                 pruebasalv = comp.DECOMPRESS(pruebasalv);                
 
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 rutaArchivo = openFileDialog.FileName;
                 Stopwatch stopwatch = new Stopwatch();
@@ -84,9 +83,9 @@ namespace ED2LAB1_CAMP1127922
                     {
                         persona.companies[i] = code.Encode(persona.companies[i]);
                     }
-                    if (action == "INSERT") { arbol.Add(persona); inserts++; }                   
-                    else if (action == "PATCH") { arbol.Patch(persona); patchs++; }
-                    else if (action == "DELETE") { arbol.Delete(persona); deletes++; }
+                    if (action == "INSERT") { arbol.Add(persona);}                   
+                    else if (action == "PATCH") { arbol.Patch(persona);}
+                    else if (action == "DELETE") { arbol.Delete(persona);}
                 }
             }
         }        
@@ -209,10 +208,8 @@ namespace ED2LAB1_CAMP1127922
             nombretxt.Text = "";
         }
 
-        static List<string> ObtenerArchivos(string parteNombre)
+        static string ObtenerRutaCarpeta()
         {
-            List<string> contenidoArchivos = new List<string>();
-
             using (var dialog = new FolderBrowserDialog())
             {
                 dialog.Description = "Selecciona la carpeta";
@@ -220,31 +217,63 @@ namespace ED2LAB1_CAMP1127922
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.SelectedPath))
                 {
-                    string rutaCarpeta = dialog.SelectedPath;
-                    string[] archivos = Directory.GetFiles(rutaCarpeta, "*" + parteNombre + "*.txt");
-
-                    foreach (string archivoEncontrado in archivos)
-                    {
-                        try
-                        {
-                            string contenido = File.ReadAllText(archivoEncontrado);
-                            contenidoArchivos.Add(contenido);
-                            Console.WriteLine("Se ha leído el archivo " + archivoEncontrado + ".");
-                        }
-                        catch (IOException e)
-                        {
-                            Console.WriteLine("Error al abrir el archivo " + archivoEncontrado + ": " + e.Message);
-                        }
-                    }
+                    return dialog.SelectedPath;
                 }
+                else
+                {
+                    MessageBox.Show("No se seleccionó una carpeta válida.");
+                    return null;
+                }
+            }
+        }
+        static List<string> ObtenerArchivos(string rutaCarpeta, string parteNombre)
+        {
+            List<string> contenidoArchivos = new List<string>();
+            string[] archivos = Directory.GetFiles(rutaCarpeta, "*" + parteNombre + "*.txt");
+
+            foreach (string archivoEncontrado in archivos)
+            {
+                string contenido = File.ReadAllText(archivoEncontrado);
+                contenidoArchivos.Add(contenido);
+                Console.WriteLine("Se ha leído el archivo " + archivoEncontrado + ".");
             }
 
             return contenidoArchivos;
         }
 
+
+
+
         private void buscartasbtn_Click(object sender, EventArgs e)
         {
-            List<string> cartas = ObtenerArchivos(buscartastxt.Text);
+            try
+            {
+                List<string> cartasnom = ObtenerArchivos(rutaCarpetaCartas,buscartastxt.Text);
+                if (cartasnom.Count()!=0)
+                {
+                    string resultado = string.Join("\n\n\n", cartasnom);
+                    MessageBox.Show(resultado);
+                }
+                else
+                {
+                    MessageBox.Show("No se han encontrado coincidencias");
+                }            
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Error al abrir el archivo");
+            }
+            buscartastxt.Text = "";
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (rutaCarpetaCartas == null)
+            {
+                rutaCarpetaCartas = ObtenerRutaCarpeta();
+            }
+            button2.Enabled = false;
+            button2.Text = "Carpeta Cargada Satiscactoriamente";
         }
     }
 }
