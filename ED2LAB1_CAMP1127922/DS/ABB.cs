@@ -64,8 +64,43 @@ namespace ED2LAB1_CAMP1127922.DS
             }
 
             // Recalcula el factor de equilibrio y realiza las rotaciones si es necesario
-            nodo.RecalcularFactorEquilibrio();
-            return BalancearNodo(nodo);
+            int balance = FactorBalance(nodo);
+
+            if (balance > 1 && nuevaPersona.dpi.CompareTo(nodo.izquierda.persona.dpi) < 0)
+                return RotacionDerecha(nodo);
+
+            if (balance < -1 && nuevaPersona.dpi.CompareTo(nodo.derecha.persona.dpi) > 0)
+                return RotacionIzquierda(nodo);
+
+            if (balance > 1 && nuevaPersona.dpi.CompareTo(nodo.izquierda.persona.dpi) > 0)
+            {
+                nodo.izquierda = RotacionIzquierda(nodo.izquierda);
+                return RotacionDerecha(nodo);
+            }
+
+            if (balance < -1 && nuevaPersona.dpi.CompareTo(nodo.derecha.persona.dpi) < 0)
+            {
+                nodo.derecha = RotacionDerecha(nodo.derecha);
+                return RotacionIzquierda(nodo);
+            }
+
+            return nodo;
+        }
+
+        private int Altura(Nodo nodo)
+        {
+            if (nodo == null) { return 0; }
+
+
+            return nodo.altura;
+        }
+        //obtener el balance
+        private int FactorBalance(Nodo nodo)
+        {
+            if (nodo == null)
+                return 0;
+
+            return Altura(nodo.izquierda) - Altura(nodo.derecha);
         }
 
         public void Delete(string dpiBuscado)
@@ -77,47 +112,88 @@ namespace ED2LAB1_CAMP1127922.DS
         {
             if (nodo == null)
             {
-                // El nodo no se encuentra en el árbol, no se hace nada.
                 return nodo;
             }
 
-            // Compara el DPI del nodo actual con el DPI buscado
-            int comparacion = dpiBuscado.CompareTo(nodo.persona.dpi);
-
-            if (comparacion < 0)
+            // Realiza la eliminación recursiva como en un árbol binario de búsqueda
+            if (dpiBuscado.CompareTo(nodo.persona.dpi) < 0)
             {
-                // El DPI deseado está en el subárbol izquierdo.
                 nodo.izquierda = Delete(nodo.izquierda, dpiBuscado);
             }
-            else if (comparacion > 0)
+            else if (dpiBuscado.CompareTo(nodo.persona.dpi) > 0)
             {
-                // El DPI deseado está en el subárbol derecho.
                 nodo.derecha = Delete(nodo.derecha, dpiBuscado);
             }
             else
             {
-                // Se encontró el nodo con el DPI deseado para eliminar.
-                if (nodo.izquierda == null || nodo.derecha == null)
+                // Nodo encontrado, manejar los tres casos
+
+                // Caso 1: El nodo a eliminar es una hoja
+                if (nodo.izquierda == null && nodo.derecha == null)
                 {
-                    // Si el nodo tiene 0 o 1 hijo, simplemente se elimina.
-                    nodo = (nodo.izquierda != null) ? nodo.izquierda : nodo.derecha;
+                    nodo = null;
                 }
+                // Caso 2: El nodo a eliminar tiene un solo hijo
+                else if (nodo.izquierda == null)
+                {
+                    nodo = nodo.derecha;
+                }
+                else if (nodo.derecha == null)
+                {
+                    nodo = nodo.izquierda;
+                }
+                // Caso 3: El nodo a eliminar tiene dos hijos
                 else
                 {
-                    // Si el nodo tiene 2 hijos, se busca el sucesor inmediato (nodo con el DPI más bajo en el subárbol derecho).
-                    Nodo sucesor = EncontrarMinimo(nodo.derecha);
-                    nodo.persona.dpi = sucesor.persona.dpi;
+                    // Encuentra el sucesor inorden (el nodo más pequeño en el subárbol derecho)
+                    Nodo sucesor = EncontrarSucesor(nodo.derecha);
+
+                    // Copia los datos del sucesor al nodo actual
+                    nodo.persona = sucesor.persona;
+
+                    // Elimina el sucesor
                     nodo.derecha = Delete(nodo.derecha, sucesor.persona.dpi);
                 }
             }
-            if (nodo != null)
+
+            if (nodo == null)
             {
-                nodo.RecalcularFactorEquilibrio();
+                return nodo;
             }
-            // Aplica las rotaciones necesarias y retorna el nodo balanceado
-            return BalancearNodo(nodo);
+            // Actualizar altura y realizar rotaciones si es necesario
+            nodo.altura = 1 + Math.Max(Altura(nodo.izquierda), Altura(nodo.derecha));
+            int balance = FactorBalance(nodo);
+
+            if (balance > 1 && FactorBalance(nodo.izquierda) >= 0)
+                return RotacionDerecha(nodo);
+
+            if (balance > 1 && FactorBalance(nodo.izquierda) < 0)
+            {
+                nodo.izquierda = RotacionIzquierda(nodo.izquierda);
+                return RotacionDerecha(nodo);
+            }
+
+            if (balance < -1 && FactorBalance(nodo.derecha) <= 0)
+                return RotacionIzquierda(nodo);
+
+            if (balance < -1 && FactorBalance(nodo.derecha) > 0)
+            {
+                nodo.derecha = RotacionDerecha(nodo.derecha);
+                return RotacionIzquierda(nodo);
+            }
+
+            return nodo;
         }
 
+        private Nodo EncontrarSucesor(Nodo nodo)
+        {
+            Nodo actual = nodo;
+            while (actual.izquierda != null)
+            {
+                actual = actual.izquierda;
+            }
+            return actual;
+        }
 
 
         private void Patch(Nodo nodo, Person persona)
@@ -206,99 +282,31 @@ namespace ED2LAB1_CAMP1127922.DS
             }
             return nodo;
         }
-        private Nodo BalancearNodo(Nodo nodo)
+        private Nodo RotacionIzquierda(Nodo nodo)
         {
-            // Recalcula el factor de equilibrio del nodo
-            int factorEquilibrio = CalcularFactorEquilibrio(nodo);
+            Nodo nododerecha = nodo.derecha;
+            Nodo nodoizquierda = nododerecha.izquierda;
 
-            if (factorEquilibrio > 1)
-            {
-                // Desbalance a la izquierda
-                if (CalcularFactorEquilibrio(nodo.izquierda) >= 0)
-                {
-                    // Rotación simple a la derecha (RR)
-                    return RotacionRR(nodo);
-                }
-                else
-                {
-                    // Rotación doble izquierda-derecha (LR)
-                    return RotacionLR(nodo);
-                }
-            }
-            else if (factorEquilibrio < -1)
-            {
-                // Desbalance a la derecha
-                if (CalcularFactorEquilibrio(nodo.derecha) <= 0)
-                {
-                    // Rotación simple a la izquierda (LL)
-                    return RotacionLL(nodo);
-                }
-                else
-                {
-                    // Rotación doble derecha-izquierda (RL)
-                    return RotacionRL(nodo);
-                }
-            }
+            nododerecha.izquierda = nodo;
+            nodo.derecha = nodoizquierda;
 
-            // No se necesita balanceo, retorna el nodo sin cambios
-            return nodo;
+            nodo.altura = 1 + Math.Max(Altura(nodo.izquierda), Altura(nodo.derecha));
+            nododerecha.altura = 1 + Math.Max(Altura(nododerecha.izquierda), Altura(nododerecha.derecha));
+
+            return nododerecha;
         }
-
-
-        private int CalcularFactorEquilibrio(Nodo nodo)
+        private Nodo RotacionDerecha(Nodo nodo)
         {
-            if (nodo == null)
-            {
-                return 0;
-            }
+            Nodo nodoizquierda = nodo.izquierda;
+            Nodo nododerecha = nodoizquierda.derecha;
 
-            int alturaIzquierda = (nodo.izquierda != null) ? nodo.izquierda.FactorEquilibrio : 0;
-            int alturaDerecha = (nodo.derecha != null) ? nodo.derecha.FactorEquilibrio : 0;
+            nodoizquierda.derecha = nodo;
+            nodo.izquierda = nododerecha;
 
-            return alturaIzquierda - alturaDerecha;
-        }
+            nodo.altura = 1 + Math.Max(Altura(nodo.izquierda), Altura(nodo.derecha));
+            nodoizquierda.altura = 1 + Math.Max(Altura(nodoizquierda.izquierda), Altura(nodoizquierda.derecha));
 
-        private Nodo RotacionLL(Nodo nodo)
-        {
-            if (nodo == null || nodo.izquierda == null || nodo.izquierda.derecha == null)
-            {
-                // No se puede realizar la rotación, retorna el nodo original
-                return nodo;
-            }
-
-            Nodo nuevaRaiz = nodo.izquierda;
-            nodo.izquierda = nuevaRaiz.derecha;
-            nuevaRaiz.derecha = nodo;
-            nodo.RecalcularFactorEquilibrio();
-            nuevaRaiz.RecalcularFactorEquilibrio();
-            return nuevaRaiz;
-        }
-
-        private Nodo RotacionRR(Nodo nodo)
-        {
-            if (nodo == null || nodo.izquierda == null)
-            {
-                // No se puede realizar la rotación, retorna el nodo original
-                return nodo;
-            }
-
-            Nodo nuevaRaiz = nodo.izquierda;
-            nodo.izquierda = nuevaRaiz.derecha;
-            nuevaRaiz.derecha = nodo;
-            nodo.RecalcularFactorEquilibrio();
-            nuevaRaiz.RecalcularFactorEquilibrio();
-            return nuevaRaiz;
-        }
-
-        private Nodo RotacionLR(Nodo nodo)
-        {
-            nodo.izquierda = RotacionRR(nodo.izquierda);
-            return RotacionLL(nodo);
-        }
-        private Nodo RotacionRL(Nodo nodo)
-        {
-            nodo.derecha = RotacionLL(nodo.derecha);
-            return RotacionRR(nodo);
+            return nodoizquierda;
         }
 
     }
