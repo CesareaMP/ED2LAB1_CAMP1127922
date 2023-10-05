@@ -50,11 +50,11 @@ namespace ED2LAB1_CAMP1127922
                 rutaCarpetaCartas = ObtenerRutaCarpeta();
                     if (rutaCarpetaCartas != null)
                     {
-                        REC = ObtenerArchivos(rutaCarpetaCartas);
+                        REC = ObtenerArchivos(rutaCarpetaCartas);                    
                     }
-                    CargarDatosDesdeCSV(rutaArchivo);
-                    //crearCSV(rutaArchivo, "ARBOL_CODIFICADO", arbol.PrintTree());
-                    stopwatch.Stop();
+                CargarDatosDesdeCSV(rutaArchivo);                
+                //crearCSV(rutaArchivo, "ARBOL_CODIFICADO", arbol.PrintTree());
+                stopwatch.Stop();
                 long elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
                 showmslbl.Text = $"{elapsedMilliseconds}ms";
                 button1.Enabled = false;
@@ -221,6 +221,7 @@ namespace ED2LAB1_CAMP1127922
                         jsons.Add(jsonString);
                     }
                     crearCSV(rutaArchivo,nombre, jsons, "\\Exports");
+                    MessageBox.Show("Archivo creado satisfactoriamente\nCreado en la misma carpeta del archivo de entrada");
                 }
                 else MessageBox.Show("no se encontraron datos asociados al nombre de " + nombre);
             }
@@ -293,7 +294,27 @@ namespace ED2LAB1_CAMP1127922
 
         private void buscartasbtn_Click(object sender, EventArgs e)
         {
-           
+            string dpi = code.Encode(buscartastxt.Text);
+            Person persona;
+            if (buscartastxt.Text == "") MessageBox.Show("Ingrese un nombre a buscar");
+            else
+            {
+                persona = arbol.SearchDpi(dpi);
+                if (persona != null)
+                {
+                    
+                    List<string> lista = persona.letters;
+                    List<Dictionary<string, int>> dictio = persona.dictio;
+                    string total = persona.name+"\n\n";
+                    for (int i = 0; i < lista.Count(); i++)
+                    {
+                        total += comp.DECOMPRESS(lista[i], dictio[i])+"\n\n";
+                    }
+                    MessageBox.Show(total);
+                }
+
+                else MessageBox.Show("No se encontraron datos asociados al DPI: " + dpitxt.Text);
+            }
             buscartastxt.Text = "";
         }
 

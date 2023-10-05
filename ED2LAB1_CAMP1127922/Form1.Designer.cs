@@ -43,7 +43,6 @@
             this.buscartasbtn = new System.Windows.Forms.Button();
             this.buscartastxt = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
             this.edTabControl.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -106,15 +105,15 @@
             // 
             // dpitxt
             // 
-            this.dpitxt.Location = new System.Drawing.Point(53, 22);
+            this.dpitxt.Location = new System.Drawing.Point(53, 27);
             this.dpitxt.Name = "dpitxt";
-            this.dpitxt.Size = new System.Drawing.Size(172, 20);
+            this.dpitxt.Size = new System.Drawing.Size(191, 20);
             this.dpitxt.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(22, 25);
+            this.label1.Location = new System.Drawing.Point(22, 30);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(25, 13);
             this.label1.TabIndex = 0;
@@ -134,7 +133,7 @@
             // 
             // nombrebtn
             // 
-            this.nombrebtn.Location = new System.Drawing.Point(26, 62);
+            this.nombrebtn.Location = new System.Drawing.Point(25, 65);
             this.nombrebtn.Name = "nombrebtn";
             this.nombrebtn.Size = new System.Drawing.Size(219, 100);
             this.nombrebtn.TabIndex = 5;
@@ -144,15 +143,15 @@
             // 
             // nombretxt
             // 
-            this.nombretxt.Location = new System.Drawing.Point(73, 22);
+            this.nombretxt.Location = new System.Drawing.Point(72, 26);
             this.nombretxt.Name = "nombretxt";
-            this.nombretxt.Size = new System.Drawing.Size(172, 20);
+            this.nombretxt.Size = new System.Drawing.Size(173, 20);
             this.nombretxt.TabIndex = 4;
             // 
             // nombrelbl
             // 
             this.nombrelbl.AutoSize = true;
-            this.nombrelbl.Location = new System.Drawing.Point(23, 25);
+            this.nombrelbl.Location = new System.Drawing.Point(22, 29);
             this.nombrelbl.Name = "nombrelbl";
             this.nombrelbl.Size = new System.Drawing.Size(44, 13);
             this.nombrelbl.TabIndex = 3;
@@ -197,22 +196,11 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "Ingrese DPI";
             // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(163, 12);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(133, 78);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "Cargar Carpeta";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(308, 317);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.edTabControl);
             this.Controls.Add(this.showmslbl);
             this.Controls.Add(this.button1);
@@ -248,7 +236,6 @@
         private System.Windows.Forms.Button buscartasbtn;
         private System.Windows.Forms.TextBox buscartastxt;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button2;
     }
 }
 
