@@ -186,6 +186,7 @@
             this.buscartastxt.Name = "buscartastxt";
             this.buscartastxt.Size = new System.Drawing.Size(142, 20);
             this.buscartastxt.TabIndex = 1;
+            this.buscartastxt.TextChanged += new System.EventHandler(this.buscartastxt_TextChanged);
             // 
             // label2
             // 

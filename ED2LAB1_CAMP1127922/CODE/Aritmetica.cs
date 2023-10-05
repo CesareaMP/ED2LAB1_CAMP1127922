@@ -187,7 +187,7 @@ namespace ED2LAB1_CAMP1127922
         }
         private string split15(string mensaje)
         {
-            int longitudFragmento = 15;
+            int longitudFragmento = 10;
             string fragmento = "";
             for (int i = 0; i < mensaje.Length; i += longitudFragmento)
             {

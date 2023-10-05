@@ -35,7 +35,7 @@ namespace ED2LAB1_CAMP1127922.DS
         public List<string> PrintTree()
         {
             return PrintTree(raiz);
-        }
+        }       
         private Nodo Add(Nodo nodo, Person nuevaPersona)
         {
             if (nodo == null)
@@ -196,8 +196,8 @@ namespace ED2LAB1_CAMP1127922.DS
                 Tree.AddRange(PrintTree(nodo.derecha)); // Recorre el subárbol derecho
             }
             return Tree;
-        }
-       
+        }      
+
         private Nodo EncontrarMinimo(Nodo nodo)
         {
             while (nodo.izquierda != null)

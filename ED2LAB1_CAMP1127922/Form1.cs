@@ -23,7 +23,7 @@ namespace ED2LAB1_CAMP1127922
         string rutaArchivo;
         string rutaCarpeta;
         string rutaCarpetaCartas=null;
-        List<string> REC;       
+        Dictionary<string, List<string>> REC;  
         public Form1()
         {
             InitializeComponent();
@@ -37,21 +37,24 @@ namespace ED2LAB1_CAMP1127922
         {
             try
             {
-                string asd= comp.COMPRESS("COMPADRE NO COMPRO COCO");
-                asd = comp.DECOMPRESS(asd);
                 OpenFileDialog openFileDialog = new OpenFileDialog();
                 openFileDialog.Filter = "Archivos CSV (*.csv)|*.csv";
-                string pruebasalv = comp.COMPRESS("ABBABBABBABB");
-                pruebasalv = comp.DECOMPRESS(pruebasalv);                
+                //string pruebasalv = comp.COMPRESS("ABBABBABBABB");
+                //pruebasalv = comp.DECOMPRESS(pruebasalv);                
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 rutaArchivo = openFileDialog.FileName;
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
-                CargarDatosDesdeCSV(rutaArchivo);
-                //crearCSV(rutaArchivo, "ARBOL_CODIFICADO", arbol.PrintTree());
-                stopwatch.Stop();
+                rutaCarpetaCartas = ObtenerRutaCarpeta();
+                    if (rutaCarpetaCartas != null)
+                    {
+                        REC = ObtenerArchivos(rutaCarpetaCartas);
+                    }
+                    CargarDatosDesdeCSV(rutaArchivo);
+                    //crearCSV(rutaArchivo, "ARBOL_CODIFICADO", arbol.PrintTree());
+                    stopwatch.Stop();
                 long elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
                 showmslbl.Text = $"{elapsedMilliseconds}ms";
                 button1.Enabled = false;
@@ -78,7 +81,7 @@ namespace ED2LAB1_CAMP1127922
                     string action = content.Split(';')[0];
                     string info = content.Split(';')[1];
                     var persona = JsonConvert.DeserializeObject<Person>(info);
-                    persona.dpi=code.Encode(persona.dpi);
+                    persona.dpi = code.Encode(persona.dpi);
                     for (int i = 0; i < persona.companies.Count; i++)
                     {
                         persona.companies[i] = code.Encode(persona.companies[i]);
@@ -87,6 +90,23 @@ namespace ED2LAB1_CAMP1127922
                     else if (action == "PATCH") { arbol.Patch(persona);}
                     else if (action == "DELETE") { arbol.Delete(persona);}
                 }
+                foreach (var keyValuePair in REC)
+                {
+                    string dpi = keyValuePair.Key;
+                    List<string> cartas = keyValuePair.Value;
+                    dpi=code.Encode(dpi);
+                    List<string> carta = new List<string>();
+                    List<Dictionary<string, int>> dictio = new List<Dictionary<string, int>>();
+                    for (int i = 0; i < cartas.Count(); i++)
+                    {
+                        var tuplecompre = comp.COMPRESS(cartas[i]);
+                        carta.Add(tuplecompre.Item1);
+                        dictio.Add(tuplecompre.Item2);
+                    }
+                    Person prueba=arbol.SearchDpi(dpi);
+                    prueba.letters = carta;
+                    prueba.dictio = dictio;
+                }
             }
         }        
 
@@ -94,11 +114,11 @@ namespace ED2LAB1_CAMP1127922
         {
 
         }        
-        public void crearCSV(string ruta, string nombreArchivo, List<string> jsons)
+        public void crearCSV(string ruta, string nombreArchivo, List<string> jsons, string nombreCarpeta)
         {
             int indiceUltimaDiagonal = ruta.LastIndexOf('\\');
-            ruta = ruta.Substring(0, indiceUltimaDiagonal) + "\\Exports";
-            CrearCarpeta(ruta);
+            ruta = ruta.Substring(0, indiceUltimaDiagonal) + nombreCarpeta;
+            CrearCarpeta(ruta, nombreArchivo);
             try
             {
                 string filePath = Path.Combine(ruta, nombreArchivo + ".csv");
@@ -110,9 +130,8 @@ namespace ED2LAB1_CAMP1127922
                         writer.WriteLine(json);
                     }
                 }
-
-                MessageBox.Show("Archivo CSV creado exitosamente en " + filePath);
-                Process.Start(filePath); // Abrir el archivo creado
+                //MessageBox.Show("Archivo CSV creado exitosamente en " + filePath);
+                //Process.Start(filePath); // Abrir el archivo creado
             }
             catch (Exception ex)
             {
@@ -120,7 +139,7 @@ namespace ED2LAB1_CAMP1127922
             }
         }
 
-        public void CrearCarpeta(string ruta)
+        public void CrearCarpeta(string ruta, string nombreCarpeta)
         {
             try
             {
@@ -153,7 +172,7 @@ namespace ED2LAB1_CAMP1127922
                 persona = arbol.SearchDpi(dpi);                
                 if (persona != null)
                 {
-                    persona.dpi = code.Decode(dpi);
+                    persona.dpi = code.Decode(dpi);                    
                     for (int i = 0; i < persona.companies.Count; i++)
                     {
                         persona.companies[i] = code.Decode(persona.companies[i]);
@@ -201,7 +220,7 @@ namespace ED2LAB1_CAMP1127922
 
                         jsons.Add(jsonString);
                     }
-                    crearCSV(rutaArchivo,nombre, jsons);
+                    crearCSV(rutaArchivo,nombre, jsons, "\\Exports");
                 }
                 else MessageBox.Show("no se encontraron datos asociados al nombre de " + nombre);
             }
@@ -217,7 +236,17 @@ namespace ED2LAB1_CAMP1127922
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.SelectedPath))
                 {
-                    return dialog.SelectedPath;
+                    // Verificar si la carpeta contiene archivos .txt
+                    string[] archivosTxt = Directory.GetFiles(dialog.SelectedPath, "*.txt");
+                    if (archivosTxt.Length > 0)
+                    {
+                        return dialog.SelectedPath;
+                    }
+                    else
+                    {
+                        MessageBox.Show("La carpeta seleccionada no contiene archivos TXT.");
+                        return null;
+                    }
                 }
                 else
                 {
@@ -226,54 +255,57 @@ namespace ED2LAB1_CAMP1127922
                 }
             }
         }
-        static List<string> ObtenerArchivos(string rutaCarpeta, string parteNombre)
+
+        static Dictionary<string, List<string>> ObtenerArchivos(string rutaCarpeta)
         {
-            List<string> contenidoArchivos = new List<string>();
-            string[] archivos = Directory.GetFiles(rutaCarpeta, "*" + parteNombre + "*.txt");
+            Dictionary<string, List<string>> archivosAgrupados = new Dictionary<string, List<string>>();
+            string[] archivos = Directory.GetFiles(rutaCarpeta, "*.txt");
 
             foreach (string archivoEncontrado in archivos)
             {
                 string contenido = File.ReadAllText(archivoEncontrado);
-                contenidoArchivos.Add(contenido);
-                Console.WriteLine("Se ha leído el archivo " + archivoEncontrado + ".");
+
+                // Obtener el nombre del archivo sin extensión
+                string nombreArchivo = Path.GetFileNameWithoutExtension(archivoEncontrado);
+
+                // Dividir el nombre del archivo en partes usando "-"
+                string[] partesNombre = nombreArchivo.Split('-');
+
+                if (partesNombre.Length >= 2)
+                {
+                    string parteCentral = partesNombre[1]; // Obtener la parte central
+
+                    if (archivosAgrupados.ContainsKey(parteCentral))
+                    {
+                        archivosAgrupados[parteCentral].Add(contenido); // Agregar contenido a la lista existente
+                    }
+                    else
+                    {
+                        archivosAgrupados[parteCentral] = new List<string> { contenido }; // Crear una nueva lista
+                    }
+                }
             }
 
-            return contenidoArchivos;
+            return archivosAgrupados;
         }
-
 
 
 
         private void buscartasbtn_Click(object sender, EventArgs e)
         {
-            try
-            {
-                List<string> cartasnom = ObtenerArchivos(rutaCarpetaCartas,buscartastxt.Text);
-                if (cartasnom.Count()!=0)
-                {
-                    string resultado = string.Join("\n\n\n", cartasnom);
-                    MessageBox.Show(resultado);
-                }
-                else
-                {
-                    MessageBox.Show("No se han encontrado coincidencias");
-                }            
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Error al abrir el archivo");
-            }
+           
             buscartastxt.Text = "";
         }
 
+
         private void button2_Click(object sender, EventArgs e)
         {
-            if (rutaCarpetaCartas == null)
-            {
-                rutaCarpetaCartas = ObtenerRutaCarpeta();
-            }
-            button2.Enabled = false;
-            button2.Text = "Carpeta Cargada Satiscactoriamente";
+           
+        }
+
+        private void buscartastxt_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

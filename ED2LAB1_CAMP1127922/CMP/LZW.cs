@@ -8,9 +8,9 @@ namespace ED2LAB1_CAMP1127922.CMP
 {
     internal class LZW
     {
-        private Dictionary<string, int> init = new Dictionary<string, int>();
-        private void CFD(string mensaje)
+        public (string compr, Dictionary<string, int> dictio) COMPRESS(string mensaje)
         {
+            Dictionary<string, int> init = new Dictionary<string, int>();
             for (int i = 0; i < mensaje.Length; i++)
             {
                 string current = Convert.ToString(mensaje[i]);
@@ -19,10 +19,6 @@ namespace ED2LAB1_CAMP1127922.CMP
                     init.Add(current, init.Count);
                 }
             }
-        }
-        public string COMPRESS(string mensaje)
-        {
-            CFD(mensaje);
             string w = null;
             string k = "";
             string wk = "";
@@ -50,10 +46,10 @@ namespace ED2LAB1_CAMP1127922.CMP
                 }
             }
             salida += init[w] + ",";
-            return salida;
+            return (salida,init);
         }
 
-        public string DECOMPRESS(string compress)
+        public string DECOMPRESS(string compress, Dictionary<string, int> init)
         {
             string original = "";
             int total = compress.Split(',').Count()-1;
