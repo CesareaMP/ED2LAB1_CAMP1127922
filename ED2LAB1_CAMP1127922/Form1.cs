@@ -94,6 +94,8 @@ namespace ED2LAB1_CAMP1127922
                 {
                     string dpi = keyValuePair.Key;
                     List<string> cartas = keyValuePair.Value;
+                    string nomArchivo;
+                    string predpi = dpi;
                     dpi=code.Encode(dpi);
                     List<string> carta = new List<string>();
                     List<Dictionary<string, int>> dictio = new List<Dictionary<string, int>>();
@@ -102,6 +104,10 @@ namespace ED2LAB1_CAMP1127922
                         var tuplecompre = comp.COMPRESS(cartas[i]);
                         carta.Add(tuplecompre.Item1);
                         dictio.Add(tuplecompre.Item2);
+                        nomArchivo = "compressed-REC-" + predpi + "-" + Convert.ToString(i + 1);
+                        List<string> imagine= new List<string>();
+                        imagine.Add(carta[i]);
+                        crearCSV(rutaArchivo, nomArchivo, imagine, "\\COMPRESSED");
                     }
                     Person prueba=arbol.SearchDpi(dpi);
                     prueba.letters = carta;
