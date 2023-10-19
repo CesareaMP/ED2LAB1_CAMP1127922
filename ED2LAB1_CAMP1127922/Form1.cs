@@ -375,7 +375,9 @@ namespace ED2LAB1_CAMP1127922
 
         private void btnConversaciones_Click(object sender, EventArgs e)
         {
-
+            Crypt crypt = new Crypt();
+            string mensaje = crypt.Encrypt("esta es una prueba alv, a ver que tal sale alv, espero que bien", "Mi abuelo tieso nunca estuvo equivocado, todo fue una trampa para silenciarlo");
+            string decriptado = crypt.Decrypt(mensaje, "Mi abuelo tieso nunca estuvo equivocado, todo fue una trampa para silenciarlo");
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             rutaCarpetaCartas = ObtenerRutaCarpeta();
