@@ -1,5 +1,6 @@
 ﻿using ED2LAB1_CAMP1127922.CMP;
 using ED2LAB1_CAMP1127922.DS;
+using ED2LAB1_CAMP1127922.ENC;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,9 @@ namespace ED2LAB1_CAMP1127922
         string rutaArchivo;
         string rutaCarpeta;
         string rutaCarpetaCartas=null;
-        Dictionary<string, List<string>> REC;  
+        Dictionary<string, List<string>> REC;
+        Dictionary<string, List<string>> CONV;        
+        int ops = 0;
         public Form1()
         {
             InitializeComponent();
@@ -47,19 +50,20 @@ namespace ED2LAB1_CAMP1127922
                 rutaArchivo = openFileDialog.FileName;
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
-                rutaCarpetaCartas = ObtenerRutaCarpeta();
-                    if (rutaCarpetaCartas != null)
-                    {
-                        REC = ObtenerArchivos(rutaCarpetaCartas);                    
-                    }
+                
                 CargarDatosDesdeCSV(rutaArchivo);                
                 //crearCSV(rutaArchivo, "ARBOL_CODIFICADO", arbol.PrintTree());
+                ops++;
                 stopwatch.Stop();
                 long elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
                 showmslbl.Text = $"{elapsedMilliseconds}ms";
                 button1.Enabled = false;
                 button1.Text = "Archivo cargado satisfactoriamente";
-                edTabControl.Enabled = true;    
+                    if (ops>=3)
+                    {
+                        edTabControl.Enabled = true;
+                    }
+                   
             }
             else
             {
@@ -90,31 +94,39 @@ namespace ED2LAB1_CAMP1127922
                     else if (action == "PATCH") { arbol.Patch(persona);}
                     else if (action == "DELETE") { arbol.Delete(persona);}
                 }
-                foreach (var keyValuePair in REC)
+                
+            }
+        }        
+
+        private void MergeLetterandUser()
+        {
+            foreach (var keyValuePair in REC)
+            {
+                string dpi = keyValuePair.Key;
+                List<string> cartas = keyValuePair.Value;
+                string nomArchivo;
+                string predpi = dpi;
+                dpi = code.Encode(dpi);
+                List<string> carta = new List<string>();
+                List<Dictionary<string, int>> dictio = new List<Dictionary<string, int>>();
+                for (int i = 0; i < cartas.Count(); i++)
                 {
-                    string dpi = keyValuePair.Key;
-                    List<string> cartas = keyValuePair.Value;
-                    string nomArchivo;
-                    string predpi = dpi;
-                    dpi=code.Encode(dpi);
-                    List<string> carta = new List<string>();
-                    List<Dictionary<string, int>> dictio = new List<Dictionary<string, int>>();
-                    for (int i = 0; i < cartas.Count(); i++)
-                    {
-                        var tuplecompre = comp.COMPRESS(cartas[i]);
-                        carta.Add(tuplecompre.Item1);
-                        dictio.Add(tuplecompre.Item2);
-                        nomArchivo = "compressed-REC-" + predpi + "-" + Convert.ToString(i + 1);
-                        List<string> imagine= new List<string>();
-                        imagine.Add(carta[i]);
-                        crearCSV(rutaArchivo, nomArchivo, imagine, "\\COMPRESSED");
-                    }
-                    Person prueba=arbol.SearchDpi(dpi);
+                    var tuplecompre = comp.COMPRESS(cartas[i]);
+                    carta.Add(tuplecompre.Item1);
+                    dictio.Add(tuplecompre.Item2);
+                    nomArchivo = "compressed-REC-" + predpi + "-" + Convert.ToString(i + 1);
+                    List<string> imagine = new List<string>();
+                    imagine.Add(carta[i]);
+                    crearCSV(rutaArchivo, nomArchivo, imagine, "\\COMPRESSED");
+                }
+                Person prueba = arbol.SearchDpi(dpi);
+                if (prueba!=null)
+                {
                     prueba.letters = carta;
                     prueba.dictio = dictio;
                 }
             }
-        }        
+        }
 
         private void groupBox1_Enter(object sender, EventArgs e)
         {
@@ -310,16 +322,20 @@ namespace ED2LAB1_CAMP1127922
                 {
                     
                     List<string> lista = persona.letters;
-                    List<Dictionary<string, int>> dictio = persona.dictio;
-                    string total = persona.name+"\n\n";
-                    for (int i = 0; i < lista.Count(); i++)
+                    if (lista!=null)
                     {
-                        total += comp.DECOMPRESS(lista[i], dictio[i])+"\n\n";
+                        List<Dictionary<string, int>> dictio = persona.dictio;
+                        string total = persona.name + "\n\n";
+                        for (int i = 0; i < lista.Count(); i++)
+                        {
+                            total += comp.DECOMPRESS(lista[i], dictio[i]) + "\n\n";
+                        }
+                        MessageBox.Show(total);
                     }
-                    MessageBox.Show(total);
+                    else MessageBox.Show("No se encontraron datos asociados al DPI: " + dpitxt.Text);
                 }
 
-                else MessageBox.Show("No se encontraron datos asociados al DPI: " + dpitxt.Text);
+               
             }
             buscartastxt.Text = "";
         }
@@ -333,6 +349,50 @@ namespace ED2LAB1_CAMP1127922
         private void buscartastxt_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnCartas_Click(object sender, EventArgs e)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            rutaCarpetaCartas = ObtenerRutaCarpeta();
+            if (rutaCarpetaCartas != null)
+            {
+                REC = ObtenerArchivos(rutaCarpetaCartas);
+                MergeLetterandUser();
+                ops++;
+            }
+            if (ops >= 3)
+            {
+                edTabControl.Enabled = true;
+            }
+            stopwatch.Stop();
+            long elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+            showmslbl.Text = $"{elapsedMilliseconds}ms";
+            btnCartas.Enabled = false;
+            btnCartas.Text = "Cartas cargado satisfactoriamente";
+        }
+
+        private void btnConversaciones_Click(object sender, EventArgs e)
+        {
+
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            rutaCarpetaCartas = ObtenerRutaCarpeta();
+            if (rutaCarpetaCartas != null)
+            {
+                CONV = ObtenerArchivos(rutaCarpetaCartas);
+                ops++;
+            }
+            if (ops >= 3)
+            {
+                edTabControl.Enabled = true;
+            }
+            stopwatch.Stop();
+            long elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+            showmslbl.Text = $"{elapsedMilliseconds}ms";
+            btnConversaciones.Enabled = false;
+            btnConversaciones.Text = "Conversaciones cargadas satisfactoriamente";
         }
     }
 }

@@ -43,6 +43,8 @@
             this.buscartasbtn = new System.Windows.Forms.Button();
             this.buscartastxt = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.btnCartas = new System.Windows.Forms.Button();
+            this.btnConversaciones = new System.Windows.Forms.Button();
             this.edTabControl.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -53,7 +55,7 @@
             // 
             this.button1.Location = new System.Drawing.Point(12, 12);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(132, 78);
+            this.button1.Size = new System.Drawing.Size(132, 22);
             this.button1.TabIndex = 0;
             this.button1.Text = "Cargar Archivos";
             this.button1.UseVisualStyleBackColor = true;
@@ -196,11 +198,33 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "Ingrese DPI";
             // 
+            // btnCartas
+            // 
+            this.btnCartas.Location = new System.Drawing.Point(12, 40);
+            this.btnCartas.Name = "btnCartas";
+            this.btnCartas.Size = new System.Drawing.Size(132, 22);
+            this.btnCartas.TabIndex = 3;
+            this.btnCartas.Text = "Cargar Cartas";
+            this.btnCartas.UseVisualStyleBackColor = true;
+            this.btnCartas.Click += new System.EventHandler(this.btnCartas_Click);
+            // 
+            // btnConversaciones
+            // 
+            this.btnConversaciones.Location = new System.Drawing.Point(12, 68);
+            this.btnConversaciones.Name = "btnConversaciones";
+            this.btnConversaciones.Size = new System.Drawing.Size(132, 22);
+            this.btnConversaciones.TabIndex = 4;
+            this.btnConversaciones.Text = "Cargar Conversaciones";
+            this.btnConversaciones.UseVisualStyleBackColor = true;
+            this.btnConversaciones.Click += new System.EventHandler(this.btnConversaciones_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(308, 317);
+            this.Controls.Add(this.btnConversaciones);
+            this.Controls.Add(this.btnCartas);
             this.Controls.Add(this.edTabControl);
             this.Controls.Add(this.showmslbl);
             this.Controls.Add(this.button1);
@@ -236,6 +260,8 @@
         private System.Windows.Forms.Button buscartasbtn;
         private System.Windows.Forms.TextBox buscartastxt;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button btnCartas;
+        private System.Windows.Forms.Button btnConversaciones;
     }
 }
 
