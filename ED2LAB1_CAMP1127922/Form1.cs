@@ -25,8 +25,9 @@ namespace ED2LAB1_CAMP1127922
         string rutaCarpeta;
         string rutaCarpetaCartas=null;
         Dictionary<string, List<string>> REC;
-        Dictionary<string, List<string>> CONV;        
-        int ops = 0;
+        Dictionary<string, List<string>> CONV;
+        Crypt crypt = new Crypt();
+        bool ops = false;
         public Form1()
         {
             InitializeComponent();
@@ -53,17 +54,12 @@ namespace ED2LAB1_CAMP1127922
                 
                 CargarDatosDesdeCSV(rutaArchivo);                
                 //crearCSV(rutaArchivo, "ARBOL_CODIFICADO", arbol.PrintTree());
-                ops++;
                 stopwatch.Stop();
                 long elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
                 showmslbl.Text = $"{elapsedMilliseconds}ms";
                 button1.Enabled = false;
                 button1.Text = "Archivo cargado satisfactoriamente";
-                    if (ops>=3)
-                    {
-                        edTabControl.Enabled = true;
-                    }
-                   
+                btnCartas.Enabled = true;
             }
             else
             {
@@ -275,13 +271,19 @@ namespace ED2LAB1_CAMP1127922
             }
         }
 
-        static Dictionary<string, List<string>> ObtenerArchivos(string rutaCarpeta)
+        static Dictionary<string, List<string>> ObtenerArchivos(string rutaCarpeta, string filtroNombre)
         {
             Dictionary<string, List<string>> archivosAgrupados = new Dictionary<string, List<string>>();
             string[] archivos = Directory.GetFiles(rutaCarpeta, "*.txt");
 
             foreach (string archivoEncontrado in archivos)
             {
+                // Verificar si el nombre del archivo contiene el filtroNombre
+                if (!string.IsNullOrWhiteSpace(filtroNombre) && !Path.GetFileNameWithoutExtension(archivoEncontrado).Contains(filtroNombre))
+                {
+                    continue; // No cumple con el filtro, pasar al siguiente archivo
+                }
+
                 string contenido = File.ReadAllText(archivoEncontrado);
 
                 // Obtener el nombre del archivo sin extensión
@@ -358,11 +360,13 @@ namespace ED2LAB1_CAMP1127922
             rutaCarpetaCartas = ObtenerRutaCarpeta();
             if (rutaCarpetaCartas != null)
             {
-                REC = ObtenerArchivos(rutaCarpetaCartas);
+                REC = ObtenerArchivos(rutaCarpetaCartas,"REC");
                 MergeLetterandUser();
-                ops++;
+                CONV = ObtenerArchivos(rutaCarpetaCartas,"CONV");                
+                MergeConvsAndUser();
+                ops = true;
             }
-            if (ops >= 3)
+            if (ops == true)
             {
                 edTabControl.Enabled = true;
             }
@@ -372,29 +376,33 @@ namespace ED2LAB1_CAMP1127922
             btnCartas.Enabled = false;
             btnCartas.Text = "Cartas cargado satisfactoriamente";
         }
-
-        private void btnConversaciones_Click(object sender, EventArgs e)
+        private void MergeConvsAndUser()
         {
-            Crypt crypt = new Crypt();
-            string mensaje = crypt.Encrypt("esta es una prueba alv, a ver que tal sale alv, espero que bien", "Mi abuelo tieso nunca estuvo equivocado, todo fue una trampa para silenciarlo");
-            string decriptado = crypt.Decrypt(mensaje, "Mi abuelo tieso nunca estuvo equivocado, todo fue una trampa para silenciarlo");
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            rutaCarpetaCartas = ObtenerRutaCarpeta();
-            if (rutaCarpetaCartas != null)
+            foreach (var keyValuePair in CONV)
             {
-                CONV = ObtenerArchivos(rutaCarpetaCartas);
-                ops++;
+                string dpi = keyValuePair.Key;
+                List<string> convs = keyValuePair.Value;
+                string nomArchivo;
+                string predpi = dpi;
+                dpi = code.Encode(dpi);
+                List<string> conversations = new List<string>();
+                for (int i = 0; i < convs.Count(); i++)
+                {
+                    string convss = crypt.Encrypt(convs[i],"Mi abuelo tieso nunca estuvo equivocado, los de arriba lo silenciaron para que no desvelara sus oscuros secretos");                                       
+                    nomArchivo = "crypted-CONV-" + predpi + "-" + Convert.ToString(i + 1);
+                    conversations.Add(convss);
+                    List<string> imagine = new List<string>();
+                    imagine.Add(convss);
+                    crearCSV(rutaArchivo, nomArchivo, imagine, "\\CRYPTED");
+                }
+                Person prueba = arbol.SearchDpi(dpi);
+                if (prueba != null)
+                {
+                    prueba.conversations=conversations;
+                }
             }
-            if (ops >= 3)
-            {
-                edTabControl.Enabled = true;
-            }
-            stopwatch.Stop();
-            long elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
-            showmslbl.Text = $"{elapsedMilliseconds}ms";
-            btnConversaciones.Enabled = false;
-            btnConversaciones.Text = "Conversaciones cargadas satisfactoriamente";
         }
+
+
     }
 }

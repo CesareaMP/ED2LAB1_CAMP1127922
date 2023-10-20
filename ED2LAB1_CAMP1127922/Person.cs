@@ -19,6 +19,7 @@ namespace ED2LAB1_CAMP1127922
         public List<string> letters { get; set;}
         [JsonIgnore]
         public List<Dictionary<string, int>> dictio { get; set;}
-
+        [JsonIgnore]
+        public List<string> conversations { get; set; }
     }
 }
