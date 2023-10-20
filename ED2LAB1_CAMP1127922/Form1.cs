@@ -403,6 +403,80 @@ namespace ED2LAB1_CAMP1127922
             }
         }
 
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            string dpi = code.Encode(txtConversaciones.Text);
+            Person persona;
+            if (txtConversaciones.Text == "") MessageBox.Show("Ingrese un dpi a buscar");
+            else
+            {
+                persona = arbol.SearchDpi(dpi);
+                if (persona != null)
+                {
+
+                    List<string> lista = persona.conversations;
+                    List<string> decryptconver = new List<string>();
+                    if (lista != null)
+                    {
+                        string total ="";
+                        for (int i = 0; i < lista.Count(); i++)
+                        {
+                            decryptconver.Add(crypt.Decrypt(lista[i], "Mi abuelo tieso nunca estuvo equivocado, los de arriba lo silenciaron para que no desvelara sus oscuros secretos") + "\n\n");
+                            total += decryptconver[i];
+                        }
+                        MultiWindow multi = new MultiWindow(decryptconver,"Conversaciones");
+                        multi.ShowDialog();
+                    }
+                    else MessageBox.Show("No se encontraron datos asociados al DPI: " + txtConversaciones.Text);
+                }
+
+
+            }
+            txtConversaciones.Text = "";
+        }
+
+        private void tabtext(List<string> l)
+        {
+            List<string> listaDeStrings = l;
+
+            if (listaDeStrings != null && listaDeStrings.Count > 0)
+            {
+                // Crear un nuevo formulario que contendrá el FlowLayoutPanel
+                Form formConTabs = new Form();
+                formConTabs.Text = "Formulario con TabControl";
+
+                // Crear un FlowLayoutPanel en el formulario
+                FlowLayoutPanel flowLayoutPanel = new FlowLayoutPanel();
+                formConTabs.Controls.Add(flowLayoutPanel);
+                flowLayoutPanel.FlowDirection = FlowDirection.TopDown;
+
+                // Crear un TabControl en el FlowLayoutPanel
+                TabControl tabControl = new TabControl();
+                flowLayoutPanel.Controls.Add(tabControl);
+
+                // Agregar una pestaña para cada elemento de la lista
+                foreach (string texto in listaDeStrings)
+                {
+                    TabPage tabPage = new TabPage(texto);
+                    tabControl.TabPages.Add(tabPage);
+
+                    // Agregar un Label en cada pestaña
+                    Label label = new Label();
+                    label.Text = texto;
+                    tabPage.Controls.Add(label);
+                    label.AutoSize = true; // Ajusta automáticamente el tamaño del Label al contenido
+                }
+
+                // Configurar el formulario y el FlowLayoutPanel para mostrar barras de desplazamiento
+                formConTabs.AutoScroll = true;
+                formConTabs.AutoScrollMinSize = new System.Drawing.Size(0, flowLayoutPanel.Height);
+
+                // Mostrar el formulario con el TabControl
+                formConTabs.ShowDialog();
+            }
+        }
+
+
 
     }
 }

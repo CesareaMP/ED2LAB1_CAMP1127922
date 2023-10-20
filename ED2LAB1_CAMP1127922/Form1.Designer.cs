@@ -44,10 +44,15 @@
             this.buscartastxt = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.btnCartas = new System.Windows.Forms.Button();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.button2 = new System.Windows.Forms.Button();
+            this.txtConversaciones = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.edTabControl.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.tabPage4.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
@@ -74,12 +79,13 @@
             this.edTabControl.Controls.Add(this.tabPage3);
             this.edTabControl.Controls.Add(this.tabPage1);
             this.edTabControl.Controls.Add(this.tabPage2);
+            this.edTabControl.Controls.Add(this.tabPage4);
             this.edTabControl.Enabled = false;
             this.edTabControl.Location = new System.Drawing.Point(12, 96);
             this.edTabControl.Multiline = true;
             this.edTabControl.Name = "edTabControl";
             this.edTabControl.SelectedIndex = 0;
-            this.edTabControl.Size = new System.Drawing.Size(284, 209);
+            this.edTabControl.Size = new System.Drawing.Size(357, 209);
             this.edTabControl.TabIndex = 2;
             // 
             // tabPage3
@@ -89,14 +95,14 @@
             this.tabPage3.Controls.Add(this.label1);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(276, 183);
+            this.tabPage3.Size = new System.Drawing.Size(349, 183);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Buscar Dpi";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // dpibtn
             // 
-            this.dpibtn.Location = new System.Drawing.Point(25, 64);
+            this.dpibtn.Location = new System.Drawing.Point(62, 60);
             this.dpibtn.Name = "dpibtn";
             this.dpibtn.Size = new System.Drawing.Size(219, 100);
             this.dpibtn.TabIndex = 2;
@@ -106,7 +112,7 @@
             // 
             // dpitxt
             // 
-            this.dpitxt.Location = new System.Drawing.Point(53, 27);
+            this.dpitxt.Location = new System.Drawing.Point(90, 23);
             this.dpitxt.Name = "dpitxt";
             this.dpitxt.Size = new System.Drawing.Size(191, 20);
             this.dpitxt.TabIndex = 1;
@@ -114,7 +120,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(22, 30);
+            this.label1.Location = new System.Drawing.Point(59, 26);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(25, 13);
             this.label1.TabIndex = 0;
@@ -127,14 +133,14 @@
             this.tabPage1.Controls.Add(this.nombrelbl);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(276, 183);
+            this.tabPage1.Size = new System.Drawing.Size(349, 183);
             this.tabPage1.TabIndex = 3;
             this.tabPage1.Text = "Buscar Nombre";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // nombrebtn
             // 
-            this.nombrebtn.Location = new System.Drawing.Point(25, 65);
+            this.nombrebtn.Location = new System.Drawing.Point(59, 58);
             this.nombrebtn.Name = "nombrebtn";
             this.nombrebtn.Size = new System.Drawing.Size(219, 100);
             this.nombrebtn.TabIndex = 5;
@@ -144,7 +150,7 @@
             // 
             // nombretxt
             // 
-            this.nombretxt.Location = new System.Drawing.Point(72, 26);
+            this.nombretxt.Location = new System.Drawing.Point(106, 19);
             this.nombretxt.Name = "nombretxt";
             this.nombretxt.Size = new System.Drawing.Size(173, 20);
             this.nombretxt.TabIndex = 4;
@@ -152,7 +158,7 @@
             // nombrelbl
             // 
             this.nombrelbl.AutoSize = true;
-            this.nombrelbl.Location = new System.Drawing.Point(22, 29);
+            this.nombrelbl.Location = new System.Drawing.Point(56, 22);
             this.nombrelbl.Name = "nombrelbl";
             this.nombrelbl.Size = new System.Drawing.Size(44, 13);
             this.nombrelbl.TabIndex = 3;
@@ -165,14 +171,14 @@
             this.tabPage2.Controls.Add(this.label2);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(276, 183);
+            this.tabPage2.Size = new System.Drawing.Size(349, 183);
             this.tabPage2.TabIndex = 4;
             this.tabPage2.Text = "Buscar Cartas";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // buscartasbtn
             // 
-            this.buscartasbtn.Location = new System.Drawing.Point(35, 66);
+            this.buscartasbtn.Location = new System.Drawing.Point(71, 59);
             this.buscartasbtn.Name = "buscartasbtn";
             this.buscartasbtn.Size = new System.Drawing.Size(208, 96);
             this.buscartasbtn.TabIndex = 2;
@@ -182,7 +188,7 @@
             // 
             // buscartastxt
             // 
-            this.buscartastxt.Location = new System.Drawing.Point(101, 29);
+            this.buscartastxt.Location = new System.Drawing.Point(137, 22);
             this.buscartastxt.Name = "buscartastxt";
             this.buscartastxt.Size = new System.Drawing.Size(142, 20);
             this.buscartastxt.TabIndex = 1;
@@ -191,7 +197,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(32, 32);
+            this.label2.Location = new System.Drawing.Point(68, 25);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(63, 13);
             this.label2.TabIndex = 0;
@@ -208,11 +214,49 @@
             this.btnCartas.UseVisualStyleBackColor = true;
             this.btnCartas.Click += new System.EventHandler(this.btnCartas_Click);
             // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.button2);
+            this.tabPage4.Controls.Add(this.txtConversaciones);
+            this.tabPage4.Controls.Add(this.label3);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Size = new System.Drawing.Size(349, 183);
+            this.tabPage4.TabIndex = 5;
+            this.tabPage4.Text = "Buscar Conversaciones";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(72, 62);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(208, 96);
+            this.button2.TabIndex = 5;
+            this.button2.Text = "Buscar";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click_1);
+            // 
+            // txtConversaciones
+            // 
+            this.txtConversaciones.Location = new System.Drawing.Point(138, 25);
+            this.txtConversaciones.Name = "txtConversaciones";
+            this.txtConversaciones.Size = new System.Drawing.Size(142, 20);
+            this.txtConversaciones.TabIndex = 4;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(69, 28);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(63, 13);
+            this.label3.TabIndex = 3;
+            this.label3.Text = "Ingrese DPI";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(308, 317);
+            this.ClientSize = new System.Drawing.Size(384, 317);
             this.Controls.Add(this.btnCartas);
             this.Controls.Add(this.edTabControl);
             this.Controls.Add(this.showmslbl);
@@ -227,6 +271,8 @@
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            this.tabPage4.ResumeLayout(false);
+            this.tabPage4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -250,6 +296,10 @@
         private System.Windows.Forms.TextBox buscartastxt;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnCartas;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.TextBox txtConversaciones;
+        private System.Windows.Forms.Label label3;
     }
 }
 
