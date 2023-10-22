@@ -11,13 +11,41 @@ namespace ED2LAB1_CAMP1127922.ENC
     {
         public string Encrypt(string mensaje, string clave)
         {
-            List<int> permutacion = ObtainPerm(clave);            
-            return Permutation(permutacion,mensaje);
+            List<int> permutacion = ObtainPerm(clave);   
+            string presalida = Permutation(permutacion, mensaje);
+            presalida = CesarE(presalida, permutacion.Count());
+            return presalida;
         }
+
+        private string CesarE(string presalida, int cant)
+        {
+            string nuevasalida = "";
+            foreach (char caracter in presalida)
+            {
+                int valorAscii = (int)caracter;
+                valorAscii += cant;
+                nuevasalida += (char)valorAscii;
+            }
+            return nuevasalida;
+        }
+        private string CesarD(string presalida, int cant)
+        {
+            string nuevasalida = "";
+            foreach (char caracter in presalida)
+            {
+                int valorAscii = (int)caracter;
+                valorAscii -= cant;
+                nuevasalida += (char)valorAscii;
+            }
+            return nuevasalida;
+        }
+
         public string Decrypt(string mensaje, string clave)
         {
             List<int> permutacion = ObtainPerm(clave);
-            return InversePermutation(permutacion, mensaje);
+            string presalida = CesarD(mensaje, permutacion.Count());            
+            presalida = InversePermutation(permutacion, presalida);
+            return presalida;
         }
         private List<int> ObtainPerm(string clave)
         {

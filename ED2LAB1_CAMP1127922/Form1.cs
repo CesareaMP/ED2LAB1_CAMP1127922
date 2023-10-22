@@ -354,7 +354,7 @@ namespace ED2LAB1_CAMP1127922
         }
 
         private void btnCartas_Click(object sender, EventArgs e)
-        {
+        {          
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             rutaCarpetaCartas = ObtenerRutaCarpeta();
