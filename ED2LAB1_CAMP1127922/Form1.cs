@@ -1,6 +1,7 @@
 ﻿using ED2LAB1_CAMP1127922.CMP;
 using ED2LAB1_CAMP1127922.DS;
 using ED2LAB1_CAMP1127922.ENC;
+using ED2LAB1_CAMP1127922.ENC_NS;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -27,10 +29,12 @@ namespace ED2LAB1_CAMP1127922
         Dictionary<string, List<string>> REC;
         Dictionary<string, List<string>> CONV;
         Crypt crypt = new Crypt();
+        static RSAA rsa = new RSAA(9739, 9743);        
         bool ops = false;
         public Form1()
         {
             InitializeComponent();
+
         }
         
         private void Form1_Load(object sender, EventArgs e)
@@ -39,6 +43,11 @@ namespace ED2LAB1_CAMP1127922
 
         private void button1_Click(object sender, EventArgs e)
         {
+            
+            
+            //string msgDecrypt = rsa.Decrypt(cryptRSA,private1,common);
+
+
             try
             {
                 OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -47,24 +56,24 @@ namespace ED2LAB1_CAMP1127922
                 //pruebasalv = comp.DECOMPRESS(pruebasalv);                
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                rutaArchivo = openFileDialog.FileName;
-                Stopwatch stopwatch = new Stopwatch();
-                stopwatch.Start();
-                
-                CargarDatosDesdeCSV(rutaArchivo);                
-                //crearCSV(rutaArchivo, "ARBOL_CODIFICADO", arbol.PrintTree());
-                stopwatch.Stop();
-                long elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
-                showmslbl.Text = $"{elapsedMilliseconds}ms";
-                button1.Enabled = false;
-                button1.Text = "Archivo cargado satisfactoriamente";
-                btnCartas.Enabled = true;
-            }
-            else
-            {
-                MessageBox.Show("Seleccione el archivo a utilizar");
-            }
+                {
+                    rutaArchivo = openFileDialog.FileName;
+                    Stopwatch stopwatch = new Stopwatch();
+                    stopwatch.Start();
+
+                    CargarDatosDesdeCSV(rutaArchivo);
+                    //crearCSV(rutaArchivo, "ARBOL_CODIFICADO", arbol.PrintTree());
+                    stopwatch.Stop();
+                    long elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+                    showmslbl.Text = $"{elapsedMilliseconds}ms";
+                    button1.Enabled = false;
+                    button1.Text = "Archivo cargado satisfactoriamente";
+                    btnCartas.Enabled = true;
+                }
+                else
+                {
+                    MessageBox.Show("Seleccione el archivo a utilizar");
+                }
             }
             catch (Exception)
             {
@@ -82,6 +91,15 @@ namespace ED2LAB1_CAMP1127922
                     string info = content.Split(';')[1];
                     var persona = JsonConvert.DeserializeObject<Person>(info);
                     persona.dpi = code.Encode(persona.dpi);
+                    var keys = rsa.obtainKeys();
+                    long public1 = keys.public1;
+                    long private1 = keys.private1;
+                    long common = keys.common;
+                    persona.recluiter = rsa.Crypt(persona.recluiter, public1, common);
+                    persona.recluiter = rsa.Decrypt(persona.recluiter, private1, common);
+
+                    persona.private1 = private1;
+                    persona.private2 = common;
                     for (int i = 0; i < persona.companies.Count; i++)
                     {
                         persona.companies[i] = code.Encode(persona.companies[i]);

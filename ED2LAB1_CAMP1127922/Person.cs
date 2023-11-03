@@ -21,5 +21,10 @@ namespace ED2LAB1_CAMP1127922
         public List<Dictionary<string, int>> dictio { get; set;}
         [JsonIgnore]
         public List<string> conversations { get; set; }
+        public string recluiter { get; set; }
+        [JsonIgnore]
+        public long private1 { get; set; }
+        [JsonIgnore]
+        public long private2 { get; set; }
     }
 }
