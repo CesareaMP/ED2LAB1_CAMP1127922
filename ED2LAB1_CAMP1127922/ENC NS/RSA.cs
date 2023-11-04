@@ -11,8 +11,8 @@ namespace ED2LAB1_CAMP1127922.ENC_NS
         private long public1;
         private long private1;
         private long common;
-        public RSAA(long primo1, long primo2)
-        {
+            public RSAA(long primo1, long primo2)
+            {
             long asd1 = primo1;
             long asd2 = primo2;
             long n = primo1 * primo2;
@@ -36,7 +36,12 @@ namespace ED2LAB1_CAMP1127922.ENC_NS
             this.public1 = e;
             this.private1 = j;
             this.common = n;            
-        }
+            }
+
+            public RSAA()
+            {
+
+            }
 
         public (long public1, long private1, long common) obtainKeys ()
         {

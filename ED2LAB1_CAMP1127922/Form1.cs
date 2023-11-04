@@ -15,6 +15,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace ED2LAB1_CAMP1127922
 {
@@ -28,9 +29,9 @@ namespace ED2LAB1_CAMP1127922
         string rutaCarpetaCartas=null;
         Dictionary<string, List<string>> REC;
         Dictionary<string, List<string>> CONV;
-        Crypt crypt = new Crypt();
-        static RSAA rsa = new RSAA(9739, 9743);        
+        Crypt crypt = new Crypt();             
         bool ops = false;
+
         public Form1()
         {
             InitializeComponent();
@@ -42,12 +43,7 @@ namespace ED2LAB1_CAMP1127922
         }
 
         private void button1_Click(object sender, EventArgs e)
-        {
-            
-            
-            //string msgDecrypt = rsa.Decrypt(cryptRSA,private1,common);
-
-
+        {                        
             try
             {
                 OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -82,6 +78,17 @@ namespace ED2LAB1_CAMP1127922
         }
         private void CargarDatosDesdeCSV(string rutaArchivo)
         {
+            var valores = LeerReclutadores();
+            List<string> reclutadores = new List<string>();
+            List<string> claves = new List<string>();
+            List<string> privates = new List<string>();
+            foreach (var Actual in valores)
+            {
+                reclutadores.Add(Actual.reclutadores);
+                claves.Add(Actual.clave);
+                privates.Add(Actual.reclutadores + "," + Convert.ToString(Actual.private1) + "," + Convert.ToString(Actual.common));
+            }
+            crearCSV(rutaArchivo, "Claves", privates, "Claves");
             using (var reader = new StreamReader(rutaArchivo))
             {
                 while (reader.EndOfStream == false)
@@ -91,15 +98,15 @@ namespace ED2LAB1_CAMP1127922
                     string info = content.Split(';')[1];
                     var persona = JsonConvert.DeserializeObject<Person>(info);
                     persona.dpi = code.Encode(persona.dpi);
-                    var keys = rsa.obtainKeys();
-                    long public1 = keys.public1;
-                    long private1 = keys.private1;
-                    long common = keys.common;
-                    persona.recluiter = rsa.Crypt(persona.recluiter, public1, common);
-                    persona.recluiter = rsa.Decrypt(persona.recluiter, private1, common);
+                    //(Dictionary<string, string> reclutadores, long private1, long common)
 
-                    persona.private1 = private1;
-                    persona.private2 = common;
+                    int indexof = reclutadores.IndexOf(persona.recluiter);
+                    persona.recluiter = claves[indexof];
+                    RSAA rSAA = new RSAA();
+                    //(string cryptRSA, long private1, long common)
+                    long private1 = valores[indexof].private1;
+                    long private2 = valores[indexof].common;
+                    string descriptado = rSAA.Decrypt(claves[indexof],private1,private2);
                     for (int i = 0; i < persona.companies.Count; i++)
                     {
                         persona.companies[i] = code.Encode(persona.companies[i]);
@@ -110,7 +117,64 @@ namespace ED2LAB1_CAMP1127922
                 }
                 
             }
-        }        
+        }
+
+        private List<(string reclutadores, string clave, long private1, long common)> LeerReclutadores()
+        {
+            string json = @"[
+    ""Oscar Harris"",
+    ""Nelson Lindgren DVM"",
+    ""Miss Inez Walsh"",
+    ""Bernice Crooks"",
+    ""Christopher Roob"",
+    ""Teri Ward"",
+    ""Courtney Will"",
+    ""Dr. Leona Kuhlman"",
+    ""Oscar Bernier Sr."",
+    ""Owen Corwin"",
+    ""Franklin Fritsch"",
+    ""Eugene Jacobi"",
+    ""Sarah Stehr"",
+    ""Gene Fritsch"",
+    ""Ken Legros"",
+    ""Edgar Russel"",
+    ""Frank Trantow"",
+    ""Gretchen Nienow"",
+    ""Bill Marvin"",
+    ""Stephen Greenholt""
+]";
+
+            string claves = "2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263,269,271,277,281";
+            string[] clavesArray = claves.Split(',');
+            List<string> reclutadores = JsonConvert.DeserializeObject<List<string>>(json);
+            Random random = new Random();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;':,.<>?";
+            var stringBuilder = new StringBuilder(16);
+            List<(string reclutadores, string clave, long private1, long common)> reclaves = new List<(string reclutadores, string clave, long private1, long common)>();
+
+            foreach (var reclutador in reclutadores)
+            {
+                for (int i = 0; i < 16; i++)
+                {
+                    int index = random.Next(chars.Length-1);
+                    char randomChar = chars[index];
+                    stringBuilder.Append(randomChar);
+                }
+                string string16 = stringBuilder.ToString();
+                int index1 = random.Next(clavesArray.Length-1);
+                RSAA rsa = new RSAA(long.Parse(clavesArray[index1]), long.Parse(clavesArray[index1+1]));
+                var keys = rsa.obtainKeys();
+                long public1 = keys.public1;
+                long private1 = keys.private1;
+                long common = keys.common;
+                string clavePersonal = rsa.Crypt(string16,public1,common);
+                reclaves.Add((reclutador,clavePersonal, private1, common));
+
+                stringBuilder.Clear();
+            }
+
+            return reclaves;
+        }
 
         private void MergeLetterandUser()
         {
