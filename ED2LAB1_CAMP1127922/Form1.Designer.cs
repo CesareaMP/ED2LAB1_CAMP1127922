@@ -43,11 +43,15 @@
             this.buscartasbtn = new System.Windows.Forms.Button();
             this.buscartastxt = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.btnCartas = new System.Windows.Forms.Button();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.button2 = new System.Windows.Forms.Button();
             this.txtConversaciones = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.btnCartas = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtReclutador = new System.Windows.Forms.TextBox();
+            this.txtLlave = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.edTabControl.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -90,6 +94,10 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.txtLlave);
+            this.tabPage3.Controls.Add(this.label5);
+            this.tabPage3.Controls.Add(this.txtReclutador);
+            this.tabPage3.Controls.Add(this.label4);
             this.tabPage3.Controls.Add(this.dpibtn);
             this.tabPage3.Controls.Add(this.dpitxt);
             this.tabPage3.Controls.Add(this.label1);
@@ -102,9 +110,9 @@
             // 
             // dpibtn
             // 
-            this.dpibtn.Location = new System.Drawing.Point(62, 60);
+            this.dpibtn.Location = new System.Drawing.Point(257, 33);
             this.dpibtn.Name = "dpibtn";
-            this.dpibtn.Size = new System.Drawing.Size(219, 100);
+            this.dpibtn.Size = new System.Drawing.Size(73, 95);
             this.dpibtn.TabIndex = 2;
             this.dpibtn.Text = "Buscar";
             this.dpibtn.UseVisualStyleBackColor = true;
@@ -112,7 +120,7 @@
             // 
             // dpitxt
             // 
-            this.dpitxt.Location = new System.Drawing.Point(90, 23);
+            this.dpitxt.Location = new System.Drawing.Point(51, 28);
             this.dpitxt.Name = "dpitxt";
             this.dpitxt.Size = new System.Drawing.Size(191, 20);
             this.dpitxt.TabIndex = 1;
@@ -120,7 +128,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(59, 26);
+            this.label1.Location = new System.Drawing.Point(20, 31);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(25, 13);
             this.label1.TabIndex = 0;
@@ -203,17 +211,6 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "Ingrese DPI";
             // 
-            // btnCartas
-            // 
-            this.btnCartas.Enabled = false;
-            this.btnCartas.Location = new System.Drawing.Point(12, 54);
-            this.btnCartas.Name = "btnCartas";
-            this.btnCartas.Size = new System.Drawing.Size(132, 36);
-            this.btnCartas.TabIndex = 3;
-            this.btnCartas.Text = "Cargar Cartas";
-            this.btnCartas.UseVisualStyleBackColor = true;
-            this.btnCartas.Click += new System.EventHandler(this.btnCartas_Click);
-            // 
             // tabPage4
             // 
             this.tabPage4.Controls.Add(this.button2);
@@ -251,6 +248,50 @@
             this.label3.Size = new System.Drawing.Size(63, 13);
             this.label3.TabIndex = 3;
             this.label3.Text = "Ingrese DPI";
+            // 
+            // btnCartas
+            // 
+            this.btnCartas.Enabled = false;
+            this.btnCartas.Location = new System.Drawing.Point(12, 54);
+            this.btnCartas.Name = "btnCartas";
+            this.btnCartas.Size = new System.Drawing.Size(132, 36);
+            this.btnCartas.TabIndex = 3;
+            this.btnCartas.Text = "Cargar Cartas";
+            this.btnCartas.UseVisualStyleBackColor = true;
+            this.btnCartas.Click += new System.EventHandler(this.btnCartas_Click);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(20, 69);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(71, 13);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "Frase Iconica";
+            // 
+            // txtReclutador
+            // 
+            this.txtReclutador.Location = new System.Drawing.Point(97, 69);
+            this.txtReclutador.Name = "txtReclutador";
+            this.txtReclutador.Size = new System.Drawing.Size(145, 20);
+            this.txtReclutador.TabIndex = 4;
+            this.txtReclutador.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
+            // txtLlave
+            // 
+            this.txtLlave.Location = new System.Drawing.Point(51, 115);
+            this.txtLlave.Name = "txtLlave";
+            this.txtLlave.Size = new System.Drawing.Size(191, 20);
+            this.txtLlave.TabIndex = 6;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(20, 115);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(33, 13);
+            this.label5.TabIndex = 5;
+            this.label5.Text = "Llave";
             // 
             // Form1
             // 
@@ -300,6 +341,10 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TextBox txtConversaciones;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txtReclutador;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox txtLlave;
+        private System.Windows.Forms.Label label5;
     }
 }
 

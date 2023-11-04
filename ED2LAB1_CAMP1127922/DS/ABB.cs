@@ -206,6 +206,7 @@ namespace ED2LAB1_CAMP1127922.DS
                     nodo.persona.datebirth = persona.datebirth;
                     nodo.persona.address = persona.address;
                     nodo.persona.companies = persona.companies;
+                    nodo.persona.recluiter = persona.recluiter;
                 }
                 else if (persona.dpi.CompareTo(nodo.persona.dpi) < 0)
                 {

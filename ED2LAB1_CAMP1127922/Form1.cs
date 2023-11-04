@@ -31,6 +31,8 @@ namespace ED2LAB1_CAMP1127922
         Dictionary<string, List<string>> CONV;
         Crypt crypt = new Crypt();             
         bool ops = false;
+        List<string> reclutadores = new List<string>();
+        List<string> reclaves = new List<string>();
 
         public Form1()
         {
@@ -76,10 +78,18 @@ namespace ED2LAB1_CAMP1127922
                 MessageBox.Show("El archivo cargado es imposible de leer");
             }
         }
+        private bool ComprobarReclutador()
+        {
+            if (true)
+            {
+
+            }
+            return true;
+        }
         private void CargarDatosDesdeCSV(string rutaArchivo)
         {
             var valores = LeerReclutadores();
-            List<string> reclutadores = new List<string>();
+            
             List<string> claves = new List<string>();
             List<string> privates = new List<string>();
             foreach (var Actual in valores)
@@ -87,6 +97,7 @@ namespace ED2LAB1_CAMP1127922
                 reclutadores.Add(Actual.reclutadores);
                 claves.Add(Actual.clave);
                 privates.Add(Actual.reclutadores + "," + Convert.ToString(Actual.private1) + "," + Convert.ToString(Actual.common));
+                reclaves.Add(Actual.frase);
             }
             crearCSV(rutaArchivo, "Claves", privates, "Claves");
             using (var reader = new StreamReader(rutaArchivo))
@@ -111,15 +122,15 @@ namespace ED2LAB1_CAMP1127922
                     {
                         persona.companies[i] = code.Encode(persona.companies[i]);
                     }
-                    if (action == "INSERT") { arbol.Add(persona);}                   
-                    else if (action == "PATCH") { arbol.Patch(persona);}
+                    if (action == "INSERT") { arbol.Add(persona); }
+                    else if (action == "PATCH") {arbol.Patch(persona); }
                     else if (action == "DELETE") { arbol.Delete(persona);}
                 }
                 
             }
         }
 
-        private List<(string reclutadores, string clave, long private1, long common)> LeerReclutadores()
+        private List<(string reclutadores, string clave, long private1, long common, string frase)> LeerReclutadores()
         {
             string json = @"[
     ""Oscar Harris"",
@@ -143,24 +154,39 @@ namespace ED2LAB1_CAMP1127922
     ""Bill Marvin"",
     ""Stephen Greenholt""
 ]";
+            string jsonString = @"[
+                ""Buscamos talento."",
+                ""Un experto aquí."",
+                ""Reclutadora apasionada."",
+                ""Un futuro brillante."",
+                ""Conexiones clave."" ,
+                ""Unirse al éxito."" ,
+                ""Tu carrera importa."" ,
+                ""Experta en talento."",
+                ""Experiencia valiosa."" ,
+                ""Oportunidades aquí."" ,
+                ""Crece con nosotros."" ,
+                ""Carrera brillante."" ,
+                ""Innovación constante."" ,
+                ""Tu futuro importa."" ,
+                ""Un equipo fuerte."" ,
+                ""Construye tu futuro."" ,
+                ""Un lugar para ti."" ,
+                ""Tu éxito, nuestro éxito."" ,
+                ""Únete al cambio."" ,
+                ""Juntos somos fuertes."" 
+            ]";
 
             string claves = "2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263,269,271,277,281";
             string[] clavesArray = claves.Split(',');
             List<string> reclutadores = JsonConvert.DeserializeObject<List<string>>(json);
+            List<string> frasesreclutadores = JsonConvert.DeserializeObject<List<string>>(jsonString);
             Random random = new Random();
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;':,.<>?";
-            var stringBuilder = new StringBuilder(16);
-            List<(string reclutadores, string clave, long private1, long common)> reclaves = new List<(string reclutadores, string clave, long private1, long common)>();
-
+            List<(string reclutadores, string clave, long private1, long common, string frase)> reclaves = new List<(string reclutadores, string clave, long private1, long common, string frase)>();
+            int i = 0;
             foreach (var reclutador in reclutadores)
             {
-                for (int i = 0; i < 16; i++)
-                {
-                    int index = random.Next(chars.Length-1);
-                    char randomChar = chars[index];
-                    stringBuilder.Append(randomChar);
-                }
-                string string16 = stringBuilder.ToString();
+                string string16 = frasesreclutadores[i];
                 int index1 = random.Next(clavesArray.Length-1);
                 RSAA rsa = new RSAA(long.Parse(clavesArray[index1]), long.Parse(clavesArray[index1+1]));
                 var keys = rsa.obtainKeys();
@@ -168,11 +194,10 @@ namespace ED2LAB1_CAMP1127922
                 long private1 = keys.private1;
                 long common = keys.common;
                 string clavePersonal = rsa.Crypt(string16,public1,common);
-                reclaves.Add((reclutador,clavePersonal, private1, common));
-
-                stringBuilder.Clear();
-            }
-
+                reclaves.Add((reclutador,clavePersonal, private1, common, frasesreclutadores[i]));
+                   
+                i++;
+            }            
             return reclaves;
         }
 
@@ -260,26 +285,42 @@ namespace ED2LAB1_CAMP1127922
         private void dpibtn_Click(object sender, EventArgs e)
         {
             string dpi = code.Encode(dpitxt.Text);
+            string fraseiconica = txtReclutador.Text;
+            string llaves = txtLlave.Text;
             Person persona;
             string jsonString;
+            RSAA rsa = new RSAA();
             if (dpitxt.Text == "") MessageBox.Show("Ingrese un nombre a buscar");
             else
             {
                 persona = arbol.SearchDpi(dpi);                
                 if (persona != null)
                 {
-                    persona.dpi = code.Decode(dpi);                    
-                    for (int i = 0; i < persona.companies.Count; i++)
-                    {
-                        persona.companies[i] = code.Decode(persona.companies[i]);
-                    }
-                    jsonString = JsonConvert.SerializeObject(persona, Formatting.Indented);
-                    MessageBox.Show(jsonString);
-                    persona.dpi = code.Encode(persona.dpi);
-                    for (int i = 0; i < persona.companies.Count; i++)
-                    {
-                        persona.companies[i] = code.Encode(persona.companies[i]);
-                    }
+                    long private1 = long.Parse(llaves.Split(',')[0]);
+                    long commmon= long.Parse(llaves.Split(',')[1]);
+                    string decriptUsuario = rsa.Decrypt(persona.recluiter, private1,commmon);
+
+
+                        if (decriptUsuario == fraseiconica)
+                        {
+                            persona.dpi = code.Decode(dpi);
+                            for (int i = 0; i < persona.companies.Count; i++)
+                            {
+                                persona.companies[i] = code.Decode(persona.companies[i]);
+                            }
+                            jsonString = JsonConvert.SerializeObject(persona, Formatting.Indented);
+                            MessageBox.Show(jsonString);
+                            persona.dpi = code.Encode(persona.dpi);
+                            for (int i = 0; i < persona.companies.Count; i++)
+                            {
+                                persona.companies[i] = code.Encode(persona.companies[i]);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Usted no es quien dice ser");
+                        }
+
                 }
 
                 else MessageBox.Show("No se encontraron datos asociados al DPI: " + dpitxt.Text);
@@ -558,7 +599,9 @@ namespace ED2LAB1_CAMP1127922
             }
         }
 
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
 
-
+        }
     }
 }
